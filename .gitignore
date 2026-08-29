@@ -1,0 +1,17 @@
+venv/
+.venv/
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets.json
+
+node_modules/
+
+dist/
+build
+out/
+*.log
+
+__pycache__
