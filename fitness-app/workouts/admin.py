@@ -2,7 +2,7 @@ from django.contrib import admin
 from workouts.models import Workout, WorkoutSample
 
 class WorkoutAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['user', 'activity_type', 'started_at', 'created', 'modified']
 
 class WorkoutSampleAdmin(admin.ModelAdmin):
     pass

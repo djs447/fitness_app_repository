@@ -20,14 +20,13 @@ from rest_framework import routers
 from workouts.api.views import WorkoutViewSet, WorkoutSampleViewSet
 from users.api.views import ProfileViewSet
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
-]
-
-router = routers.SimpleRouter()
+router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
 router.register(r'workouts', WorkoutViewSet)
 router.register(r'workout_samples', WorkoutSampleViewSet)
 
-urlpatterns += router.urls
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls)),
+]
