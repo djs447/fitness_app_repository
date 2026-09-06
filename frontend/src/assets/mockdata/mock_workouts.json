@@ -2,6 +2,8 @@
     {
         "id": 1,
         "name": "Morning Run",
+        "date": "2024-06-01",
+        "time": "07:00",
         "description": "A refreshing run in the morning",
         "duration": 30,
         "difficulty": "Beginner"
@@ -9,12 +11,16 @@
     {
         "id": 2,
         "name": "Strength Training",
+        "date": "2024-06-02",
+        "time": "18:00",
         "description": "A full-body strength training workout",
         "duration": 45,
         "difficulty": "Intermediate"
     },
     {
         "id": 3,
+        "date": "2024-06-03",
+        "time": "09:00",
         "name": "Yoga Flow",
         "description": "A calming yoga flow session",
         "duration": 60,

@@ -1,0 +1,30 @@
+{
+    "id": 1,
+    "name": "Morning Run",
+    "date": "2024-06-01",
+    "time": "07:00",
+    "description": "A refreshing run in the morning",
+    "duration": 30,
+    "difficulty": "Beginner",
+    "equipment": ["Running Shoes", "Water Bottle"],
+    "exercises": [
+        {
+            "name": "Warm-up Jog",
+            "duration": 5,
+            "instructions": "Start with a light jog to warm up your muscles.",
+            "averageHeartRate": 120
+        },
+        {
+            "name": "Interval Sprints",
+            "duration": 20,
+            "instructions": "Alternate between sprinting for 30 seconds and walking for 1 minute.",
+            "averageHeartRate": 160
+        },
+        {
+            "name": "Cool-down Walk",
+            "duration": 5,
+            "instructions": "Finish with a slow walk to cool down.",
+            "averageHeartRate": 110
+        }
+    ]
+}

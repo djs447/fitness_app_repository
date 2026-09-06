@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "bio": "Fitness enthusiast and coach",
+    "goals": ["Run a marathon", "Build muscle", "Improve flexibility"],
+    "profilePicture": "https://example.com/profile-picture.jpg"
+}

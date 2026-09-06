@@ -10,6 +10,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/workouts',
+      name: 'workouts',
+      component: () => import('../views/WorkoutsView.vue'),
+    },
+    {
+      path: '/workouts/:id',
+      name: 'workout',
+      component: () => import('../views/WorkoutView.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -17,6 +27,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/profile/:id',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+    }
   ],
 })
 

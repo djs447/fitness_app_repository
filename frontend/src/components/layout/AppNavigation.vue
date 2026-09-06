@@ -5,10 +5,12 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-      <nav>
+  <div class="flex gap-4 py-5 items-center">
+      <nav class="flex py-5 items-center">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/workouts">Workouts</RouterLink>
+        <RouterLink to="/profile/1">Profile</RouterLink>
       </nav>
   </div>
 </template>
@@ -18,7 +20,6 @@ import { RouterLink } from 'vue-router'
 nav {
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
 }
 
 nav a.router-link-exact-active {
@@ -30,7 +31,6 @@ nav a.router-link-exact-active:hover {
 }
 
 nav a {
-  display: inline-block;
   padding: 0 1rem;
   border-left: 1px solid var(--color-border);
 }

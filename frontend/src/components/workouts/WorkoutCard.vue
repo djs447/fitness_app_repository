@@ -1,13 +1,18 @@
 <script setup lang="ts">
 
-import { Comment, ref } from 'vue'
+import { ref } from 'vue'
 import CommentDialog from '@/components/social/CommentDialog.vue'
+import type { Comment } from '@/types/comment'
+
 import mock_comments from '@/assets/mockdata/mock_comments.json'
+
 
 defineProps<{
     workout: {
         id: number
         name: string
+        date: string
+        time: string
         description: string
         duration: number
         difficulty: string
@@ -33,7 +38,7 @@ const toggleLike = () => {
     liked.value = !liked.value
 }
 
-const addComment = (comment: { id: number, author: string, text: string, workoutId: number }) => {
+const addComment = (comment: Comment) => {
     comments.value.push(comment)
 }
 
@@ -41,7 +46,8 @@ const addComment = (comment: { id: number, author: string, text: string, workout
 
 <template>
     <div class="workout-card bg-gray-100 p-6 rounded-lg shadow-md">
-        <h3>{{ workout.name }}</h3>
+        <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.name }}</RouterLink></h3>
+        <p>{{  workout.date}} {{ workout.time }}</p>
         <p>{{ workout.description }}</p>
         <p>Duration: {{ workout.duration }} minutes</p>
         <p>Difficulty: {{ workout.difficulty }}</p>
