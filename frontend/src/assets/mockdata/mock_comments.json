@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "text": "Great workout!",
+        "author": "John Doe",
+        "workoutId": 1
+    },
+    {
+        "id": 2,
+        "text": "I really enjoyed this session.",
+        "author": "Jane Smith",
+        "workoutId": 2
+    },
+    {
+        "id": 3,
+        "text": "Feeling relaxed after the yoga flow.",
+        "author": "Alice Johnson",
+        "workoutId": 3
+    },
+    {
+        "id": 4,
+        "text": "This workout was too challenging for me.",
+        "author": "Bob Brown",
+        "workoutId": 2
+    },
+    {
+        "id": 5,
+        "text": "I love the morning run!",
+        "author": "Charlie Davis",
+        "workoutId": 1
+    }
+]
