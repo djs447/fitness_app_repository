@@ -2,21 +2,14 @@
 
 import { RouterLink } from 'vue-router'
 
-const handleLogout = () => {
-  // Implement your logout logic here
-  console.log('Logout clicked');
-};
-
 </script>
 
 <template>
   <div class="flex gap-4 py-5 items-center">
       <nav class="flex py-5 items-center">
-        <RouterLink class="router-link" to="/home">Home</RouterLink>
-        <RouterLink class="router-link" to="/about">About</RouterLink>
-        <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
-        <RouterLink class="router-link" to="/profile/1">Profile</RouterLink>
-        <button class="router-link" @click="handleLogout">Logout</button>
+        <RouterLink class="router-link" to="/">Home</RouterLink>
+        <RouterLink class="router-link" to="/login">Login</RouterLink>
+        <RouterLink class="router-link" to="/register">Register</RouterLink>
       </nav>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import AppNavigation from '@/components/layout/AppNavigation.vue'
+import PublicAppNavigation from '@/components/layout/PublicAppNavigation.vue'
 
 </script>
 
@@ -11,7 +11,7 @@ import AppNavigation from '@/components/layout/AppNavigation.vue'
         <div class="logo-container">
         <img alt="App logo" class="logo" src="@/assets/logo.png" width="50" height="50" />
         </div>
-        <AppNavigation />
+        <PublicAppNavigation />
         <div></div>
     </header>
 </template>

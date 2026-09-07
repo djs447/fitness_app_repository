@@ -45,7 +45,7 @@ const addComment = (comment: Comment) => {
 </script>
 
 <template>
-    <div class="workout-card bg-gray-100 p-6 rounded-lg shadow-md">
+    <div class="workout-card bg-white p-6 rounded-lg shadow-md">
         <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.name }}</RouterLink></h3>
         <p>{{  workout.date}} {{ workout.time }}</p>
         <p>{{ workout.description }}</p>
