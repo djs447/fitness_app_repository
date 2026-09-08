@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
 const name = ref('');
 const email = ref('');
@@ -29,7 +30,7 @@ const handleRegister = () => {
                 <label class="p-6" for="password">Password:</label>
                 <input class="bg-white border" type="password" id="password" v-model="password" required />
             </div>
-            <button class="bg-blue-500 text-white p-2 rounded" type="submit">Register</button>
+            <button class="bg-blue-500 text-white p-2 rounded" type="submit" @click="handleRegister">Register</button>
         </form>
     </div>
 </template>

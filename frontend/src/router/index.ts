@@ -63,6 +63,12 @@ router.beforeEach((to) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return '/login'
   }
+
+  if (
+    (to.path === '/login' || to.path === '/register') && authStore.isAuthenticated
+  ) {
+    return '/app'
+  }
 })
 
 export default router

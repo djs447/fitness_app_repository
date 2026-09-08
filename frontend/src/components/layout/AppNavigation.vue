@@ -1,11 +1,16 @@
 <script setup lang="ts">
 
-import { RouterLink } from 'vue-router'
+import { useAuthStore } from '@/stores/auth';
+import { RouterLink, useRouter } from 'vue-router'
 
-const handleLogout = () => {
-  // Implement your logout logic here
-  console.log('Logout clicked');
-};
+const router = useRouter()
+const authStore = useAuthStore()
+
+async function logout() {
+    await authStore.logout()
+
+    await router.push('/')
+}
 
 </script>
 
@@ -16,7 +21,7 @@ const handleLogout = () => {
         <RouterLink class="router-link" to="/about">About</RouterLink>
         <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
         <RouterLink class="router-link" to="/profile/1">Profile</RouterLink>
-        <button class="router-link" @click="handleLogout">Logout</button>
+        <button class="router-link" @click="logout">Logout</button>
       </nav>
   </div>
 </template>
