@@ -35,21 +35,25 @@ const router = createRouter({
       },
       children: [
         {
-          path: '',
+          path: '/home',
           component: import('../views/HomeView.vue'),
         },
         {
-          path: 'profile/:id',
+          path: '/about',
+          component: import('../views/AboutView.vue'),
+        },
+        {
+          path: '/profile/:id',
           name: 'profile',
           component: import('../views/ProfileView.vue'),
         },
         {
-          path: 'workouts',
+          path: '/workouts',
           name: 'workouts',
           component: import('../views/WorkoutsView.vue'),
         },
         {
-          path: 'workouts/:id',
+          path: '/workouts/:id',
           name: 'workout',
           component: import('../views/WorkoutView.vue'),
         }
@@ -65,7 +69,7 @@ router.beforeEach((to) => {
   }
 
   if (
-    (to.path === '/login' || to.path === '/register') && authStore.isAuthenticated
+    (to.path === '/login' || to.path === '/register' || to.path === '/') && authStore.isAuthenticated
   ) {
     return '/app'
   }

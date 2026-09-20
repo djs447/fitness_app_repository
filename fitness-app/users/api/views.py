@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from users.api.serializers import ProfileSerializer, UserSerializer, RegisterSerializer
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
@@ -27,7 +28,14 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            return Response(UserSerializer(user).data, status=HTTP_201_CREATED)
+            token = Token.objects.create(user=user)
+            return Response(
+                {
+                    "token": token.key,
+                    "user": UserSerializer(user).data,
+                },
+                status=HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):

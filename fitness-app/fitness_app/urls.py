@@ -4,7 +4,7 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from workouts.api.views import WorkoutViewSet, WorkoutSampleViewSet
-from users.api.views import ProfileViewSet
+from users.api.views import ProfileViewSet, RegisterView
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
@@ -15,6 +15,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/auth/login/', obtain_auth_token, name='login'),
+    path('api/auth/register/', RegisterView.as_view(), name='register'),
     path('api/', include(router.urls)),
 ]
 

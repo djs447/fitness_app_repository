@@ -38,3 +38,11 @@ export async function getCurrentUser(): Promise<User> {
 export async function logout(): Promise<void> {
     await api.post('/users/logout/')
 }
+
+export async function register(
+    credentials: RegisterData 
+): Promise<RegisterResponse> {
+    const response = await api.post<RegisterResponse>('/auth/register/', credentials,)
+
+    return response.data
+}

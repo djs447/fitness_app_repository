@@ -1,15 +1,34 @@
 <script setup lang="ts">
 
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
-const name = ref('');
-const email = ref('');
-const password = ref('');
+const username = ref('')
+const email = ref('')
+const password = ref('')
+const error = ref('')
 
-const handleRegister = () => {
+const authStore = useAuthStore()
+const router = useRouter()
+
+async function handleRegister() {
     // Handle registration logic here
-    console.log('Registering user:', name.value, email.value, password.value);
+
+    error.value = ''
+
+    try{
+        await authStore.register(
+            username.value,
+            email.value,
+            password.value,
+        )
+
+        await router.push('/app')
+    } catch (err) {
+        console.error('Registration err', err)
+        error.value = 'Invalid registration information.'
+    }
 };
 
 </script>
@@ -20,7 +39,7 @@ const handleRegister = () => {
         <form @submit.prevent="handleRegister">
             <div class="form-group">
                 <label class="p-6" for="name">Name:</label>
-                <input class="bg-white border" type="text" id="name" v-model="name" required />
+                <input class="bg-white border" type="text" id="name" v-model="username" required />
             </div>
             <div class="form-group">
                 <label class="p-6" for="email">Email:</label>
@@ -30,7 +49,7 @@ const handleRegister = () => {
                 <label class="p-6" for="password">Password:</label>
                 <input class="bg-white border" type="password" id="password" v-model="password" required />
             </div>
-            <button class="bg-blue-500 text-white p-2 rounded" type="submit" @click="handleRegister">Register</button>
+            <button class="bg-blue-500 text-white p-2 rounded" type="submit">Register</button>
         </form>
     </div>
 </template>

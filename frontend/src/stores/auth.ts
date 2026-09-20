@@ -17,6 +17,27 @@ export const useAuthStore = defineStore('auth', () => {
     return user.value !== null && token.value !== null
   })
 
+  async function register(
+    username: string,
+    email: string,
+    password: string,
+  ) {
+    const response = await authService.register({
+      username,
+      email,
+      password,
+    })
+
+    token.value = response.token
+
+    localStorage.setItem(
+      'authToken',
+      response.token
+    )
+
+    user.value = response.user
+  }
+
   async function login(
     username: string,
     password: string,
@@ -69,5 +90,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     initialize,
     logout,
+    register,
   }
 });
