@@ -13,6 +13,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = []
 
+class CurrentProfileView(APIView):
+    permission_clases = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = ProfileSerializer(request.user.profile)
+        return Response(serializer.data)
+
 class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 

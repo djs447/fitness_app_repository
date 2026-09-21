@@ -20,7 +20,7 @@ async function logout() {
         <RouterLink class="router-link" to="/home">Home</RouterLink>
         <RouterLink class="router-link" to="/about">About</RouterLink>
         <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
-        <RouterLink class="router-link" to="/profile/1">Profile</RouterLink>
+        <RouterLink class="router-link" to="/profile">Profile</RouterLink>
         <button class="router-link" @click="logout">Logout</button>
       </nav>
   </div>
