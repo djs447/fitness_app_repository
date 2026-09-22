@@ -6,3 +6,9 @@ export async function fetch(): Promise<Profile> {
 
     return response.data
 }
+
+export async function update(data: Partial<Profile>): Promise<Profile> {
+    const response = await api.patch<Profile>('/users/profiles/me/', data,)
+
+    return response.data
+}

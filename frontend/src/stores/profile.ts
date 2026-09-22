@@ -16,8 +16,15 @@ export const useProfileStore = defineStore('profile', () => {
         console.log(response)
     }
 
+    async function update(data: Partial<Profile>) {
+        const response = await profileService.update(data)
+
+        profile.value = response
+    }
+
     return{
         profile,
         fetch,
+        update,
     }
 });

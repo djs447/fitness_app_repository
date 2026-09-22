@@ -21,11 +21,22 @@ const showEditBiographyDialog = ref(false);
 const profile = computed(() => profileStore.profile)
 const newBio = ref("");
 
-// const updateBiography = (newBio: string) => {
-//     profile.value.bio = newBio;
-//     newBio.value = "";
-//     showEditBiographyDialog.value = false;
-// };
+async function updateBiography(){
+
+    console.log(newBio.value)
+
+    try{
+        await profileStore.update({
+            bio: newBio.value
+        })
+
+        newBio.value = ''
+        showEditBiographyDialog.value = false
+    } catch (err){
+        console.error("Error updating biography:", err)
+
+    }
+}
 
 const toggleEditBiographyDialog = () => {
     showEditBiographyDialog.value = !showEditBiographyDialog.value;
@@ -43,14 +54,14 @@ onMounted(() => {
         <h1 class="text-2xl font-bold mb-4">Profile</h1>
         <div class="profile-info">
             <div class="contact-info">
-                <p><strong>Name:</strong> {{ profile?.displayName }}</p>
+                <p><strong>Name:</strong> {{ profile?.display_name }}</p>
             </div>
             <div class="biography">
                 <p><strong>Bio:</strong> {{ profile?.bio }}</p>
                 <button @click="toggleEditBiographyDialog" class="text-orange-500 hover:text-blue-300 mb-2">Edit Biography</button>
                 <div v-if="showEditBiographyDialog" class="edit-biography-dialog">
                     <textarea v-model="newBio" class="w-full p-2 border rounded mb-2"></textarea>
-                    <!-- // <button @click="updateBiography(newBio)" class="text-orange-500 hover:text-blue-300 mb-2">Save</button> -->
+                    <button @click="updateBiography()" class="text-orange-500 hover:text-blue-300 mb-2">Save</button>
                     <button @click="toggleEditBiographyDialog" class="text-gray-500 hover:text-gray-700 mb-2">Cancel</button>
                 </div>
             </div>

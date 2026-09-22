@@ -1,7 +1,7 @@
 interface Profile {
     userID: string,
-    displayName: string,
-    bio: Text,
+    display_name: string,
+    bio: string,
 }
 
 export type { Profile };
