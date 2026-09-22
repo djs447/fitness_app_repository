@@ -23,6 +23,8 @@
 
 /* semantic color variables for this project */
 :root {
+  --header-container-background-color: #ffffff;
+  --header-container-border-color: #fafafa;
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
@@ -54,8 +56,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
 }
 
 body {

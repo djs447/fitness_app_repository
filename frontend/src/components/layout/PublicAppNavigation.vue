@@ -8,8 +8,10 @@ import { RouterLink } from 'vue-router'
   <div class="flex gap-4 py-5 items-center">
       <nav class="flex py-5 items-center">
         <RouterLink class="router-link" to="/">Home</RouterLink>
-        <RouterLink class="router-link" to="/login">Login</RouterLink>
-        <RouterLink class="router-link" to="/register">Register</RouterLink>
+        <div class="auth-button-container">
+          <RouterLink class="router-link" to="/login">Login</RouterLink>
+          <RouterLink class="router-link" to="/register">Register</RouterLink>
+        </div>
       </nav>
   </div>
 </template>
@@ -21,6 +23,11 @@ import { RouterLink } from 'vue-router'
   padding: 0.5rem 1rem;
   border-radius: 6px;
   background-color: rgba(194, 194, 194, 0.479);
+}
+
+.auth-button-container{
+  display: flex;
+  width: 100%;
 }
 
 nav {

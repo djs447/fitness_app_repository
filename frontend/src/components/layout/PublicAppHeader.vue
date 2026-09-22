@@ -6,12 +6,11 @@ import PublicAppNavigation from '@/components/layout/PublicAppNavigation.vue'
 </script>
 
 <template>
-    <header class="app-header bg-amber-100">
-        <div></div>
+    <header class="app-header">
         <div class="logo-container">
-        <img alt="App logo" class="logo" src="@/assets/logo.png" width="50" height="50" />
+          <img alt="App logo" class="logo" src="@/assets/logo.png" width="80" height="80" />
         </div>
-        <PublicAppNavigation />
+        <PublicAppNavigation class="navigation-bar" />
         <div></div>
     </header>
 </template>
@@ -19,17 +18,30 @@ import PublicAppNavigation from '@/components/layout/PublicAppNavigation.vue'
 <style scoped>
 
 header {
-  line-height: 1.5;
-  height: 20%;
-  max-height: 100vh;
+  background-color: var(--header-container-background-color);
+  border-bottom: 1px solid var(--header-container-border-color);
   display: flex;
-  place-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
   justify-content: center;
-  width: 100vw;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  line-height: 1.5;
+  max-height: 30rem;
+  place-items: center;
+}
+
+.navigation-bar{
+  width: 100%;
+  justify-content: flex-end;
+  padding-right: 16px;
 }
 
 .logo {
   margin: 0 2rem 0 0;
+  padding-left: 12px;
 }
 
 </style>
