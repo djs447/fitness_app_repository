@@ -20,6 +20,12 @@ class CurrentProfileView(APIView):
         serializer = ProfileSerializer(request.user.profile)
         return Response(serializer.data)
 
+    def patch(self, request):
+        serializer = ProfileSerializer(request.user.profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 
