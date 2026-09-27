@@ -32,25 +32,30 @@ async function handleLogin() {
 
 <template>
     <div class="login-container">
-        <h1>Login</h1>
         <form @submit.prevent="handleLogin">
         <div class="form-group">
-            <label class="p-6" for="email">Username:</label>
+            <label class="p-6 text-black" for="email">Username:</label>
             <input class="bg-white border" type="text" id="username" v-model="username" required />
         </div>
         <div class="form-group">
-            <label class="p-6" for="password">Password:</label>
+            <label class="p-6 text-black" for="password">Password:</label>
             <input class="bg-white border" type="password" id="password" v-model="password" required />
         </div>
         <p v-if="error">
             {{  error }}
         </p>
-        <button class="bg-blue-500 text-white p-2 rounded" type="submit">Login</button>
+        <div class="button-container">
+            <button class="bg-green-950 text-white p-2 rounded" type="submit">Login</button>
+        </div>
         </form>
     </div>
 </template>
 
 <style scoped>
+
+button{
+    border: 2px solid black;
+}
 
 .form-group {
     margin: 1rem;
@@ -66,6 +71,14 @@ async function handleLogin() {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: var(--public-container-color)
+}
+
+.button-container{
+    display: flex;
+    flex-direction: column;
+    margin: auto auto;
+    width: 20%;
 }
 
 </style>

@@ -2,8 +2,7 @@
 
 import { ref } from 'vue';
 import PublicAppHeader from '@/components/layout/PublicAppHeader.vue';
-// import WorkoutList from '@/components/workouts/WorkoutList.vue';
-// import mock_workouts from '@/assets/mockdata/mock_workouts.json';
+import PublicAppFooter from '@/components/layout/PublicAppFooter.vue';
 
 </script>
 
@@ -12,4 +11,5 @@ import PublicAppHeader from '@/components/layout/PublicAppHeader.vue';
     <main>
         <RouterView />
     </main>
+    <PublicAppFooter />
 </template>

@@ -6,7 +6,7 @@ import { ref } from 'vue';
 
 <template>
   <div>
-    <h1>Welcome to the Public Home Page</h1>
-    <p>This is the public home page content.</p>
+    <h1 class="text-white">Welcome to the Public Home Page</h1>
+    <p class="text-white">This is the public home page content.</p>
   </div>
 </template>

@@ -1,6 +1,13 @@
 @import './base.css';
 @import 'tailwindcss';
 
+html,
+body,
+#app {
+  min-height: 100%;
+  margin: 0;
+}
+
 body {
   margin: 0;
   padding: 0;

@@ -19,10 +19,11 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 
 .router-link {
-  text-decoration: none;
   padding: 0.5rem 1rem;
+  border: 2px solid black;
   border-radius: 6px;
-  background-color: rgba(194, 194, 194, 0.479);
+  background-color: #052e16;
+  color: white;
 }
 
 .auth-button-container{
@@ -36,12 +37,13 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: black;
   background-color: var(--color-primary);
 }
 
 nav a.router-link:hover {
   background-color: transparent;
+  color: black;
 }
 
 nav a {
@@ -49,8 +51,6 @@ nav a {
   border-left: 1px solid var(--color-border);
 }
 
-nav a:first-of-type {
-  border: 0;
-}
+
 
 </style>
