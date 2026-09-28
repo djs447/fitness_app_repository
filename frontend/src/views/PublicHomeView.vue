@@ -5,8 +5,16 @@ import { ref } from 'vue';
 </script>
 
 <template>
-  <div>
-    <h1 class="text-white">Welcome to the Public Home Page</h1>
-    <p class="text-white">This is the public home page content.</p>
+  <div class="home-container">
+    <h1>Welcome to my Fitness App homepage!</h1>
+    <p>This is the public home page content.</p>
   </div>
 </template>
+
+<style scoped>
+
+.home-container{
+  color: white;
+}
+
+</style>

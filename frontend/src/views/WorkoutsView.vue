@@ -8,7 +8,19 @@ const workouts = ref(mock_workouts);
 </script>
 
 <template>
-    <h3 class="text-2xl font-bold mb-4">Workouts</h3>
-    <WorkoutList :workouts="workouts" />
-
+    <div class="workout-list-container">
+        <h3 class="text-2xl font-bold text-white">My Workouts</h3>
+        <WorkoutList :workouts="workouts" />
+    </div>
 </template>
+
+<style scoped>
+
+.workout-list-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
+</style>

@@ -52,9 +52,9 @@ const addComment = (comment: Comment) => {
         <p>Duration: {{ workout.duration }} minutes</p>
         <p>Difficulty: {{ workout.difficulty }}</p>
         <div class="workout-social">
-            <button @click="toggleLike" class="text-orange-500 hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }}</button>
-            <button @click="toggleCommentDialog" class="text-orange-500 hover:text-blue-300 mb-2">Comment</button>
-            <button @click="toggleShareDialog" class="text-orange-500 hover:text-blue-300 mb-2">Share</button>
+            <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }}</button>
+            <button @click="toggleCommentDialog" class="hover:text-blue-300 mb-2">Comment</button>
+            <button @click="toggleShareDialog" class="hover:text-blue-300 mb-2">Share</button>
         </div>
     </div>
     <CommentDialog v-if="showCommentDialog" :comments="comments" :showCommentDialog="showCommentDialog" @addComment="addComment" @showCommentDialog="toggleCommentDialog"/>
@@ -66,6 +66,7 @@ const addComment = (comment: Comment) => {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
+    color: #052e16;
 }
 
 button {

@@ -50,8 +50,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="profile">
-        <h1 class="text-2xl font-bold mb-4">Profile</h1>
+    <div class="profile-container rounded-2xl">
+        <h1 class="text-2xl font-bold mb-4 text-center">Profile</h1>
         <div class="profile-info">
             <div class="contact-info">
                 <p><strong>Name:</strong> {{ profile?.display_name }}</p>
@@ -74,6 +74,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.profile-container{
+    background-color: white;
+    padding: 50px;
+    width: 70vw;
+    margin-bottom: 30%;
+}
 
 .contact-info{
     margin-bottom: 1rem;

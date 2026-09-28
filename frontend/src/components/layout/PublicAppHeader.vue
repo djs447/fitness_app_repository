@@ -10,6 +10,9 @@ import PublicAppNavigation from '@/components/layout/PublicAppNavigation.vue'
         <div class="logo-container">
           <img alt="App logo" class="logo" src="@/assets/logo.png" width="80" height="80" />
         </div>
+        <div class="title-container">
+          <h1>FITNESS APP</h1>
+        </div>
         <PublicAppNavigation class="navigation-bar" />
         <div></div>
     </header>
@@ -33,8 +36,12 @@ header {
   place-items: center;
 }
 
+.title-container{
+  font-weight: 800;
+  margin: auto auto;
+}
+
 .navigation-bar{
-  width: 100%;
   justify-content: flex-end;
   padding-right: 16px;
 }

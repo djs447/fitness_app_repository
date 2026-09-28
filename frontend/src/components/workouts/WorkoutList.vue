@@ -22,7 +22,7 @@ const workouts = ref(mock_workouts)
 </script>
 
 <template>
-    <div class="workout-list bg-amber-100">
+    <div class="workout-list">
         <div class="workout-card">
             <WorkoutCard v-for="workout in workouts" :key="workout.id" :workout="workout" />
         </div>

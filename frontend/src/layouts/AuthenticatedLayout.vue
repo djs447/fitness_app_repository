@@ -10,3 +10,11 @@ import AppHeader from '@/components/layout/AppHeader.vue'
         <RouterView />
     </main>
 </template>
+
+<style scoped>
+
+main{
+    width: auto;
+}
+
+</style>

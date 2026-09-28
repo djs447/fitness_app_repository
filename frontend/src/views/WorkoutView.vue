@@ -22,25 +22,46 @@ const toggleCommentDialog = () => {
 </script>
 
 <template>
-    <h3 class="text-2xl font-bold mb-4">{{ mock_workout.name }}</h3>
-    <div class="workout-details">
-        <div class="workout-time">
-            <p>{{ mock_workout.date }}</p>
-            <p>{{ mock_workout.time }}</p>
-        </div>
-        <p>{{ mock_workout.description }}</p>
-        <p>Duration: {{ mock_workout.duration }} minutes</p>
-        <p>Difficulty: {{ mock_workout.difficulty }}</p>
+    <div class="back-container bg-white">
+        <RouterLink class="router-link text-black" to="/workouts">← Back</RouterLink>
     </div>
-    <EquipmentList :equipment="mock_workout.equipment" />
-    <ExerciseList :exercises="mock_workout.exercises" />
-    <div class="workout-social">
-        <button @click="toggleCommentDialog" class="text-orange-500 hover:text-blue-300 mb-2">View Comments</button>
+    <div class="workout-container rounded-lg border-l-gray-500">
+        <h3 class="text-2xl font-bold mb-4">{{ mock_workout.name }}</h3>
+        <div class="workout-details">
+            <div class="workout-time">
+                <p>{{ mock_workout.date }}</p>
+                <p>{{ mock_workout.time }}</p>
+            </div>
+            <p>{{ mock_workout.description }}</p>
+            <p>Duration: {{ mock_workout.duration }} minutes</p>
+            <p>Difficulty: {{ mock_workout.difficulty }}</p>
+        </div>
+        <EquipmentList :equipment="mock_workout.equipment" />
+        <ExerciseList :exercises="mock_workout.exercises" />
+        <div class="workout-social">
+            <button @click="toggleCommentDialog" class="text-orange-500 hover:text-blue-300 mb-2">View Comments</button>
+        </div>
     </div>
     <CommentDialog v-if="showCommentDialog" :comments="comments" :showCommentDialog="showCommentDialog" @addComment="addComment" @showCommentDialog="toggleCommentDialog"/>
 </template>
 
 <style scoped>
+
+.router-link{
+    color: black;
+}
+
+.back-container{
+    width: 60px;
+    margin: 10px 0px 10px 0px;
+    border-radius:5%;
+}
+
+.workout-container{
+    background-color: white;
+    padding: 50px;
+    width: 70vw;
+}
 
 .workout-details {
     margin-bottom: 1rem;

@@ -16,12 +16,13 @@ async function logout() {
 
 <template>
   <div class="flex gap-4 py-5 items-center">
-      <nav class="flex py-5 items-center">
-        <RouterLink class="router-link" to="/home">Home</RouterLink>
-        <RouterLink class="router-link" to="/about">About</RouterLink>
-        <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
-        <RouterLink class="router-link" to="/profile">Profile</RouterLink>
-        <button class="router-link" @click="logout">Logout</button>
+      <nav class="flex p-5 items-center nav-container">
+        <div class="nav-button-container">
+          <RouterLink class="router-link" to="/home">Home</RouterLink>
+          <RouterLink class="router-link" to="/about">About</RouterLink>
+          <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
+          <RouterLink class="router-link" to="/profile">Profile</RouterLink>
+        </div>
       </nav>
   </div>
 </template>
@@ -29,10 +30,19 @@ async function logout() {
 <style scoped>
 
 .router-link {
-  text-decoration: none;
   padding: 0.5rem 1rem;
+  border: 2px solid black;
   border-radius: 6px;
-  background-color: rgba(194, 194, 194, 0.479);
+  background-color: #052e16;
+  color: white;
+  gap: 1rem;
+}
+
+.nav-container{
+  display: flex;
+  justify-content: center;
+  margin-left: 100px;
+  gap: 1rem;
 }
 
 nav {
@@ -41,21 +51,13 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: black;
   background-color: var(--color-primary);
 }
 
 nav a.router-link:hover {
   background-color: transparent;
-}
-
-nav a {
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
+  color: black;
 }
 
 </style>
