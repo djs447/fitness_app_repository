@@ -62,6 +62,10 @@ const addComment = (comment: Comment) => {
 
 <style scoped>
 
+.workout-card {
+    width: 35vw;
+}
+
 .workout-social {
     display: flex;
     justify-content: space-between;

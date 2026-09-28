@@ -15,7 +15,7 @@ async function logout() {
 </script>
 
 <template>
-  <div class="flex gap-4 py-5 items-center">
+  <div class="flex py-5">
       <nav class="flex p-5 items-center nav-container">
         <div class="nav-button-container">
           <RouterLink class="router-link" to="/home">Home</RouterLink>
@@ -30,6 +30,7 @@ async function logout() {
 <style scoped>
 
 .router-link {
+  margin: 0 10px;
   padding: 0.5rem 1rem;
   border: 2px solid black;
   border-radius: 6px;
@@ -41,7 +42,7 @@ async function logout() {
 .nav-container{
   display: flex;
   justify-content: center;
-  margin-left: 100px;
+  margin-left: 0px;
   gap: 1rem;
 }
 
