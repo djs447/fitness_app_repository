@@ -9,6 +9,7 @@ export const useWorkoutStore = defineStore('workout', () => {
 
     const workout = ref<Workout | null>(null)
     const workouts = ref<Array<Workout> | []>([])
+    const my_workouts = ref<Array<Workout> | []>([])
 
     async function fetch(){
         const response = await workoutService.fetchWorkouts()
@@ -29,11 +30,19 @@ export const useWorkoutStore = defineStore('workout', () => {
         workout.value = response
     }
 
+    async function fetchMyWorkouts(){
+        const response = await workoutService.fetchMyWorkouts()
+
+        my_workouts.value = response
+    }
+
     return{
         workout,
         workouts,
+        my_workouts,
         fetch,
         get,
         update,
+        fetchMyWorkouts,
     }
 });

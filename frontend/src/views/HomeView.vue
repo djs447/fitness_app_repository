@@ -15,7 +15,7 @@ async function fetchWorkouts(){
         await workoutStore.fetch()
     } catch (err) {
         console.log("error", err)
-        error.value = "Error fetching profile data."
+        error.value = "Error fetching workout data."
     }
 }
 

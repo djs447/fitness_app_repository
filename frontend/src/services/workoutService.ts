@@ -18,3 +18,9 @@ export async function updateWorkout(workoutID: string, data: Partial<Workout>): 
 
     return response.data
 }
+
+export async function fetchMyWorkouts(): Promise<Array<Workout>> {
+    const response = await api.get<Array<Workout>>('/workouts/me/')
+    console.log(response.data)
+    return response.data
+}

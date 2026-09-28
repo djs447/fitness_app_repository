@@ -1,11 +1,27 @@
 <script setup lang="ts">
 import WorkoutList from '@/components/workouts/WorkoutList.vue';
-import { ref } from 'vue';
+import { onMounted, ref, computed } from 'vue'
 import type { Workout } from '@/types/workout'
+import { useWorkoutStore } from '@/stores/workout';
 
-defineProps<{
-    workouts: Array<Workout>,
-}>()
+const workoutStore = useWorkoutStore();
+const error = ref('');
+const workouts = computed(() => workoutStore.my_workouts)
+
+async function fetchMyWorkouts(){
+    error.value = ""
+
+    try{
+        await workoutStore.fetchMyWorkouts()
+    } catch (err) {
+        console.log("error", err)
+        error.value = "Error fetching my workout data."
+    }
+}
+
+onMounted(() => {
+  fetchMyWorkouts();
+})
 
 </script>
 
