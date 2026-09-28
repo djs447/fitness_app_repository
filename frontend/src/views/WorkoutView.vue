@@ -1,16 +1,24 @@
 <script setup lang="ts">
 
-import { ref } from 'vue';
-import mock_workout from '@/assets/mockdata/mock_workout1.json';
+import { onMounted, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import mock_comments from '@/assets/mockdata/mock_comments.json';
 
 import type { Comment } from '@/types/comment.ts';
 import CommentDialog from '@/components/social/CommentDialog.vue';
+import { useWorkoutStore } from '@/stores/workout';
 import ExerciseList from '@/components/workouts/ExerciseList.vue';
 import EquipmentList from '@/components/workouts/EquipmentList.vue';
+import type { Workout } from '@/types/workout';
+import WorkoutsView from './WorkoutsView.vue';
+import { fetchWorkouts } from '@/services/workoutService';
 
 const comments = ref(mock_comments);
 const showCommentDialog = ref(false);
+const workoutStore = useWorkoutStore();
+const route = useRoute();
+const error = ref('');
+const workout = computed(() => workoutStore.workout)
 
 const addComment = (comment: Comment) => {
     comments.value.push(comment)
@@ -19,6 +27,21 @@ const toggleCommentDialog = () => {
     showCommentDialog.value = !showCommentDialog.value
 }
 
+async function fetchWorkout(){
+    error.value = ""
+
+    try{
+        await workoutStore.get(route.params.id)
+    } catch (err) {
+        console.log("error", err)
+        error.value = "Error fetching workout data."
+    }
+}
+
+onMounted(() => {
+    fetchWorkout();
+})
+
 </script>
 
 <template>
@@ -26,18 +49,18 @@ const toggleCommentDialog = () => {
         <RouterLink class="router-link text-black" to="/workouts">← Back</RouterLink>
     </div>
     <div class="workout-container rounded-lg border-l-gray-500">
-        <h3 class="text-2xl font-bold mb-4">{{ mock_workout.name }}</h3>
+        <h3 class="text-2xl font-bold mb-4">{{ workout?.id }}</h3>
         <div class="workout-details">
             <div class="workout-time">
-                <p>{{ mock_workout.date }}</p>
-                <p>{{ mock_workout.time }}</p>
+                <p>{{ workout?.started_at }}</p>
+                <p>{{ workout?.duration }}</p>
             </div>
-            <p>{{ mock_workout.description }}</p>
-            <p>Duration: {{ mock_workout.duration }} minutes</p>
-            <p>Difficulty: {{ mock_workout.difficulty }}</p>
+            <p>{{ workout?.activity_type }}</p>
+            <p>Duration: {{ workout?.duration }} minutes</p>
+            <p>Difficulty: Hard! </p>
         </div>
-        <EquipmentList :equipment="mock_workout.equipment" />
-        <ExerciseList :exercises="mock_workout.exercises" />
+        <!-- TODO, add these later <EquipmentList :equipment="mock_workout.equipment" />
+        <ExerciseList :exercises="mock_workout.exercises" /> -->
         <div class="workout-social">
             <button @click="toggleCommentDialog" class="text-orange-500 hover:text-blue-300 mb-2">View Comments</button>
         </div>

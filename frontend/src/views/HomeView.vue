@@ -1,24 +1,32 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
 import WorkoutList from '../components/workouts/WorkoutList.vue'
-import WorkoutCard from '../components/workouts/WorkoutCard.vue'
+import { useWorkoutStore } from '@/stores/workout'
 
-import { ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
-defineProps<{
-    workouts: Array<{
-        id: number
-        name: string
-        description: string
-        duration: number
-        difficulty: string
-    }>
-}>()
+const workoutStore = useWorkoutStore();
+const error = ref('');
+const workouts = computed(() => workoutStore.workouts)
+
+async function fetchWorkouts(){
+    error.value = ""
+
+    try{
+        await workoutStore.fetch()
+    } catch (err) {
+        console.log("error", err)
+        error.value = "Error fetching profile data."
+    }
+}
+
+onMounted(() => {
+  fetchWorkouts();
+})
 </script>
 
 <template>
   <main>
-    <WorkoutList :workouts="workouts" />
+    <WorkoutList :workouts=workouts />
   </main>
 </template>
 

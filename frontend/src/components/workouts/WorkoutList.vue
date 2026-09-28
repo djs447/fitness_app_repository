@@ -2,22 +2,13 @@
 
 <script setup lang="ts">
 
-import mock_workouts from '@/assets/mockdata/mock_workouts.json'
-
+import type { Workout } from '@/types/workout'
 import WorkoutCard from '@/components/workouts/WorkoutCard.vue'
 import { ref } from 'vue'
 
 defineProps<{
-    workouts: Array<{
-        id: number
-        name: string
-        description: string
-        duration: number
-        difficulty: string
-    }>
+    workouts: Array<Workout>
 }>()
-
-const workouts = ref(mock_workouts)
 
 </script>
 

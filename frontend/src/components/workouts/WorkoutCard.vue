@@ -3,20 +3,13 @@
 import { ref } from 'vue'
 import CommentDialog from '@/components/social/CommentDialog.vue'
 import type { Comment } from '@/types/comment'
+import type { Workout } from '@/types/workout'
 
 import mock_comments from '@/assets/mockdata/mock_comments.json'
 
 
 defineProps<{
-    workout: {
-        id: number
-        name: string
-        date: string
-        time: string
-        description: string
-        duration: number
-        difficulty: string
-    }
+    workout: Workout
 }>()
 
 const liked = ref(false)
@@ -46,11 +39,10 @@ const addComment = (comment: Comment) => {
 
 <template>
     <div class="workout-card bg-white p-6 rounded-lg shadow-md">
-        <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.name }}</RouterLink></h3>
-        <p>{{  workout.date}} {{ workout.time }}</p>
-        <p>{{ workout.description }}</p>
+        <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.id }}</RouterLink></h3>
+        <p>{{  workout.started_at}}</p>
+        <p>{{ workout.activity_type }}</p>
         <p>Duration: {{ workout.duration }} minutes</p>
-        <p>Difficulty: {{ workout.difficulty }}</p>
         <div class="workout-social">
             <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }}</button>
             <button @click="toggleCommentDialog" class="hover:text-blue-300 mb-2">Comment</button>

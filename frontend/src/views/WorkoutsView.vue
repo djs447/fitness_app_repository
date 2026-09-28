@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import WorkoutList from '@/components/workouts/WorkoutList.vue';
 import { ref } from 'vue';
-import mock_workouts from '@/assets/mockdata/mock_workouts.json';
+import type { Workout } from '@/types/workout'
 
-const workouts = ref(mock_workouts);
+defineProps<{
+    workouts: Array<Workout>,
+}>()
 
 </script>
 

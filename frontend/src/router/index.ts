@@ -29,33 +29,33 @@ const router = createRouter({
     // Authenticated routes
     {
       path: '/app',
-      component: import('../layouts/AuthenticatedLayout.vue'),
+      component: () => import('../layouts/AuthenticatedLayout.vue'),
       meta: {
         requiresAuth: true,
       },
       children: [
         {
           path: '/home',
-          component: import('../views/HomeView.vue'),
+          component: () => import('../views/HomeView.vue'),
         },
         {
           path: '/about',
-          component: import('../views/AboutView.vue'),
+          component: () => import('../views/AboutView.vue'),
         },
         {
           path: '/profile',
           name: 'profile',
-          component: import('../views/ProfileView.vue'),
+          component: () => import('../views/ProfileView.vue'),
         },
         {
           path: '/workouts',
           name: 'workouts',
-          component: import('../views/WorkoutsView.vue'),
+          component: () => import('../views/WorkoutsView.vue'),
         },
         {
           path: '/workouts/:id',
           name: 'workout',
-          component: import('../views/WorkoutView.vue'),
+          component: () => import('../views/WorkoutView.vue'),
         }
       ],
     },
