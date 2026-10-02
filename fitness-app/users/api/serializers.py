@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 class WorkoutUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username','email','first_name','last_name']
+        fields = ['id', 'username','email','first_name','last_name']
         read_only_fields = ['username','email','first_name','last_name']
 
 class RegisterSerializer(serializers.ModelSerializer):

@@ -1,5 +1,5 @@
 import api from '@/services/api'
-import type { Workout } from '@/types/workout'
+import type { Workout, CreateWorkout } from '@/types/workout'
 
 export async function fetchWorkouts(): Promise<Array<Workout>> {
     const response = await api.get<Array<Workout>>('/workouts/')
@@ -14,7 +14,7 @@ export async function getWorkout(workoutID: string | string[] | undefined): Prom
 }
 
 export async function updateWorkout(workoutID: string, data: Partial<Workout>): Promise<Workout> {
-    const response = await api.patch<Workout>('/workouts/' + workoutID, data,)
+    const response = await api.patch<Workout>('/workouts/' + workoutID + '/', data,)
 
     return response.data
 }
@@ -22,5 +22,14 @@ export async function updateWorkout(workoutID: string, data: Partial<Workout>): 
 export async function fetchMyWorkouts(): Promise<Array<Workout>> {
     const response = await api.get<Array<Workout>>('/workouts/me/')
     console.log(response.data)
+    return response.data
+}
+
+export async function createWorkout(workout: CreateWorkout): Promise<Workout> {
+    const payload = {
+        ...workout,
+        started_at: new Date(workout.started_at).toISOString()
+    }
+    const response = await api.post<Workout>('/workouts/', payload)
     return response.data
 }

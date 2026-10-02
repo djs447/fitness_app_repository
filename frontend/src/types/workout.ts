@@ -10,4 +10,10 @@ interface Workout {
     user: User,
 }
 
-export type { Workout };
+interface CreateWorkout {
+    activity_type: string,
+    started_at: string,
+    duration: string,
+}
+
+export type { Workout, CreateWorkout };

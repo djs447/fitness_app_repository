@@ -4,7 +4,7 @@ from users.api.serializers import WorkoutUserSerializer
 
 class WorkoutSerializer(serializers.ModelSerializer):
 
-    user = WorkoutUserSerializer()
+    user = WorkoutUserSerializer(read_only=True)
 
     class Meta:
         model = Workout
