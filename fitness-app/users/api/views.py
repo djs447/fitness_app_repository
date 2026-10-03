@@ -1,17 +1,42 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from users.api.serializers import ProfileSerializer, UserSerializer, RegisterSerializer
+from users.api.serializers import ProfileSerializer, UserSerializer, RegisterSerializer, GoalSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.response import Response
-from users.models import Profile
+from users.models import Profile, Goal
+from common.permissions import IsGoalOwner
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = []
+
+class GoalViewSet(viewsets.ModelViewSet):
+    queryset = Goal.objects.all()
+    serializer_class = GoalSerializer
+    permission_classes = [IsAuthenticated, IsGoalOwner]
+
+    def patch(self, request, pk=None):
+        goal = self.get_object()
+        serializer = self.get_serializer(goal, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        print("Creating new goal")
+        print(self.request.user.profile)
+        serializer.save(profile=self.request.user.profile)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(profile=request.user.profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CurrentProfileView(APIView):
     permission_clases = [IsAuthenticated]

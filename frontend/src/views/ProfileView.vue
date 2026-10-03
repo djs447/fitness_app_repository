@@ -1,8 +1,12 @@
 <script setup lang="ts">
 
 import { ref, onMounted, computed } from 'vue';
+
 import { useProfileStore } from '@/stores/profile';
 import LoadingView from './LoadingView.vue';
+import GoalItem from '@/components/user/GoalItem.vue';
+import EditGoalItem from '@/components/user/EditGoalItem.vue';
+import type { Goal } from '@/types/profile'
 
 const profileStore = useProfileStore()
 const error = ref("")
@@ -23,6 +27,9 @@ async function fetchProfile(){
 }
 
 const showEditBiographyDialog = ref(false);
+const editingGoalId = ref<string | null>(null);
+const showAddGoalDialog = ref(false);
+const addGoal = ref<Goal>({ 'id': '', 'title': '', 'description': '', 'target_date': new Date(), 'completion_date': new Date() });
 const profile = computed(() => profileStore.profile)
 const newBio = ref("");
 
@@ -45,6 +52,14 @@ async function updateBiography(){
 
 const toggleEditBiographyDialog = () => {
     showEditBiographyDialog.value = !showEditBiographyDialog.value;
+};
+
+const toggleEditGoalItem = (goalId: string) => {
+    editingGoalId.value = editingGoalId.value === goalId ? null : goalId;
+};
+
+const toggleAddGoalDialog = () => {
+    showAddGoalDialog.value = !showAddGoalDialog.value;
 };
 
 onMounted(() => {
@@ -71,11 +86,14 @@ onMounted(() => {
                 </div>
             </div>
             <p><strong>Goals:</strong></p>
-            <ul>
-                <div class="goals-container">
-                    <li v-for="goal in profile?.goals" :key="goal.id" class="goal"><div class="goal-info"><span class="font-bold">{{ goal.title }}:</span> {{ goal.description }} </div> <div class="goal-target">TARGET: {{ goal.target_date }}</div> <div class="goal-completed">COMPLETED: {{ goal.completion_date }}</div></li>
-                </div>
+            <ul class="goals-container">
+                <li v-for="goal in profile?.goals" :key="goal.id" class="goal" :class="{'editing-goal': editingGoalId === goal.id}">
+                    <GoalItem v-if="editingGoalId !== goal.id" :goal="goal" @edit="toggleEditGoalItem" />
+                    <EditGoalItem v-else mode="update" :goal="goal" @edit="toggleEditGoalItem"/>
+                </li>
             </ul>
+            <EditGoalItem v-if="showAddGoalDialog" mode="add" :goal="addGoal" @close="toggleAddGoalDialog" />
+            <button v-if="!showAddGoalDialog" @click="toggleAddGoalDialog" class="text-orange-500 hover:text-blue-300 mb-2">Add Goal</button>
         </div>
     </div>
     <LoadingView v-else />
@@ -90,20 +108,14 @@ onMounted(() => {
 
 .goal{
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto auto auto auto;
     align-items: center;
     gap: 2rem;
     padding: 1rem 0;
 }
 
-.goal-info{
-    min-width: 0;
-}
-
-.goal-target,
-.goal-completed{
-    white-space: nowrap;
-    margin-right: 20px;
+.editing-goal{
+    display: block;
 }
 
 .profile-container{

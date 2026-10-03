@@ -15,7 +15,7 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name}"
 
 class Goal(SoftDeletableBaseModel):
-    profile = models.ForeignKey('users.Profile', on_delete=models.CASCADE, related_name="goals")
+    profile = models.ForeignKey('users.Profile', on_delete=models.CASCADE, related_name="goals", blank=True, null=True)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     target_date = models.DateField()
