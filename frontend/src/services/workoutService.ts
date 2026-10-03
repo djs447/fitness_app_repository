@@ -30,6 +30,6 @@ export async function createWorkout(workout: CreateWorkout): Promise<Workout> {
         ...workout,
         started_at: new Date(workout.started_at).toISOString()
     }
-    const response = await api.post<Workout>('/workouts/', payload)
+    const response = await api.post<Workout>('/workouts/me/', payload)
     return response.data
 }

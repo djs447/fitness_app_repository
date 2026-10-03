@@ -54,12 +54,15 @@ const toggleEditWorkout = () => {
 <template>
     <div class="workout-card bg-white p-6 rounded-lg shadow-md">
         <div class="flex items-center justify-between">
-            <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.id }}</RouterLink></h3>
+            <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.title }}</RouterLink></h3>
             <FontAwesomeIcon v-if="showEditButton" class="text-gray-500 hover:text-blue-300" @click="toggleEditWorkout" :icon="faPen" />
         </div>
         <p>{{  workout.started_at}}</p>
         <p>{{ workout.activity_type }}</p>
         <p>Duration: {{ workout.duration }} minutes</p>
+        <p>City: {{ workout.city }}</p>
+        <p>County: {{ workout.county }}</p>
+        <p>State: {{ workout.state }}</p>
         <div class="workout-social">
             <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }}</button>
             <button @click="toggleCommentDialog" class="hover:text-blue-300 mb-2">Comment</button>

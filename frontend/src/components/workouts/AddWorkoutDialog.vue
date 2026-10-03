@@ -9,7 +9,7 @@ const emit = defineEmits<{
 }>()
 
 const workoutStore = useWorkoutStore()
-const workout = ref<CreateWorkout>({ activity_type: '', duration: '', started_at: '' })
+const workout = ref<CreateWorkout>({ title: '', description: '', notes: '', distance: 0, elevation: 0, city: '', county: '', state: '', activity_type: '', duration: '', started_at: '' })
 
 async function addWorkout(newWorkout: CreateWorkout) {
     try{
@@ -42,6 +42,95 @@ async function addWorkout(newWorkout: CreateWorkout) {
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                 />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+                    Title
+                </label>
+                <input
+                    id="title"
+                    v-model="workout.title"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description
+                </label>
+                <input
+                    id="description"
+                    v-model="workout.description"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="notes">
+                    Notes
+                </label>
+                <input
+                    id="notes"
+                    v-model="workout.notes"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="distance">
+                    Distance
+                </label>
+                <input
+                    id="distance"
+                    v-model="workout.distance"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="elevation">
+                    Elevation
+                </label>
+                <input
+                    id="elevation"
+                    v-model="workout.elevation"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                    City
+                </label>
+                <input
+                    id="city"
+                    v-model="workout.city"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="county">
+                    County
+                </label>
+                <input
+                    id="county"
+                    v-model="workout.county"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="state">
+                    State
+                </label>
+                <input
+                    id="state"
+                    v-model="workout.state"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="started_at">

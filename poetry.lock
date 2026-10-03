@@ -54,6 +54,22 @@ asgiref = ">=3.6"
 django = ">=4.2"
 
 [[package]]
+name = "django-localflavor"
+version = "5.1"
+description = "Country-specific Django helpers"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "django_localflavor-5.1-py3-none-any.whl", hash = "sha256:33a0b5418c99c733e87fd949e08ba3c6ccf7e7a9edd1458dac15586701b2cd90"},
+    {file = "django_localflavor-5.1.tar.gz", hash = "sha256:afacbe4902698a6772c5621a0cad18f4e2f9f198a7284d3da57418c78c150080"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+python-stdnum = ">=2.2"
+
+[[package]]
 name = "django-model-utils"
 version = "5.0.0"
 description = "Django model mixins and utilities"
@@ -123,6 +139,21 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-stdnum"
+version = "2.2"
+description = "Python module to handle standardized numbers and codes"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "python_stdnum-2.2-py3-none-any.whl", hash = "sha256:bdf98fd117a0ca152e4047aa8ad254bae63853d4e915ddd4e0effb33ba0e9260"},
+    {file = "python_stdnum-2.2.tar.gz", hash = "sha256:e95fcfa858a703d4a40130cb3eaac133c60d8808a7f3c98efeedac968c2479b9"},
+]
+
+[package.extras]
+soap = ["zeep"]
+
+[[package]]
 name = "sqlparse"
 version = "0.6.0"
 description = "A non-validating SQL parser."
@@ -167,4 +198,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "e47918c624f4a3b0ab4fff93b1d6a7fa485b6a3cd76a83d4d6fe316d8c922f18"
+content-hash = "2a671abdae50d05a905b9cbcbb1d4b2720a58080bd75704dc2153700be214e48"

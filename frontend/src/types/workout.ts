@@ -2,6 +2,14 @@ import type { User } from '@/types/user'
 
 interface Workout {
     id: string,
+    title: string,
+    description: string,
+    notes: string,
+    distance: number,
+    elevation: number,
+    city: string,
+    county: string,
+    state: string,
     created: string,
     modified: string,
     activity_type: string,
@@ -11,6 +19,14 @@ interface Workout {
 }
 
 interface CreateWorkout {
+    title: string,
+    description: string,
+    notes: string,
+    distance: number,
+    elevation: number,
+    city: string,
+    county: string,
+    state: string,
     activity_type: string,
     started_at: string,
     duration: string,
