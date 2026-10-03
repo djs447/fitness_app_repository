@@ -2,18 +2,23 @@
 
 import { ref, onMounted, computed } from 'vue';
 import { useProfileStore } from '@/stores/profile';
+import LoadingView from './LoadingView.vue';
 
 const profileStore = useProfileStore()
 const error = ref("")
+const isLoading = ref(true)
 
 async function fetchProfile(){
     error.value = ""
 
     try{
+        isLoading.value = true
         await profileStore.fetch()
     } catch (err) {
         console.log("error", err)
         error.value = "Error fetching profile data."
+    } finally {
+        isLoading.value = false
     }
 }
 
@@ -50,7 +55,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="profile-container rounded-2xl">
+    <div v-if="!isLoading" class="profile-container rounded-2xl">
         <h1 class="text-2xl font-bold mb-4 text-center">Profile</h1>
         <div class="profile-info">
             <div class="contact-info">
@@ -71,6 +76,7 @@ onMounted(() => {
             </ul>
         </div>
     </div>
+    <LoadingView v-else />
 </template>
 
 <style scoped>
@@ -79,6 +85,7 @@ onMounted(() => {
     background-color: white;
     padding: 50px;
     width: 70vw;
+    margin-top: 20%;
     margin-bottom: 30%;
 }
 

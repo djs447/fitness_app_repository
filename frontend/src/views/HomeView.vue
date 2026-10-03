@@ -7,15 +7,19 @@ import { onMounted, ref, computed } from 'vue'
 const workoutStore = useWorkoutStore();
 const error = ref('');
 const workouts = computed(() => workoutStore.workouts)
+const isLoading = ref(true);
 
 async function fetchWorkouts(){
     error.value = ""
 
     try{
+        isLoading.value = true
         await workoutStore.fetch()
     } catch (err) {
         console.log("error", err)
         error.value = "Error fetching workout data."
+    } finally {
+        isLoading.value = false
     }
 }
 
@@ -26,7 +30,8 @@ onMounted(() => {
 
 <template>
   <main>
-    <WorkoutList :workouts=workouts />
+    <WorkoutList v-if="!isLoading" :workouts="workouts" />
+    <LoadingView v-else />
   </main>
 </template>
 

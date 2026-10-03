@@ -15,6 +15,7 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 
 main{
     width: auto;
+    justify-content: flex-start;
 }
 
 </style>
