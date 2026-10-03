@@ -1,10 +1,21 @@
 
 from rest_framework import serializers
-from users.models import Profile, User
+from users.models import Goal, Profile, User
 
 class ProfileSerializer(serializers.ModelSerializer):
+
+    goals = serializers.SerializerMethodField()
+
     class Meta:
         model = Profile
+        fields = '__all__'
+
+    def get_goals(self, obj):
+        return GoalSerializer(obj.goals.all(), many=True).data
+
+class GoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Goal
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):

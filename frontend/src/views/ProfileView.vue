@@ -72,7 +72,9 @@ onMounted(() => {
             </div>
             <p><strong>Goals:</strong></p>
             <ul>
-                <!-- <li v-for="goal in profile.goals" :key="goal">{{ goal }}</li> -->
+                <div class="goals-container">
+                    <li v-for="goal in profile?.goals" :key="goal.id" class="goal"><div class="goal-info"><span class="font-bold">{{ goal.title }}:</span> {{ goal.description }} </div> <div class="goal-target">TARGET: {{ goal.target_date }}</div> <div class="goal-completed">COMPLETED: {{ goal.completion_date }}</div></li>
+                </div>
             </ul>
         </div>
     </div>
@@ -80,6 +82,29 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.goals-container{
+    list-style: none;
+    padding: 0;
+}
+
+.goal{
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.goal-info{
+    min-width: 0;
+}
+
+.goal-target,
+.goal-completed{
+    white-space: nowrap;
+    margin-right: 20px;
+}
 
 .profile-container{
     background-color: white;
