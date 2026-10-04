@@ -33,3 +33,7 @@ export async function createWorkout(workout: CreateWorkout): Promise<Workout> {
     const response = await api.post<Workout>('/workouts/me/', payload)
     return response.data
 }
+
+export async function deleteWorkout(workoutID: string): Promise<void> {
+    await api.delete(`/workouts/${workoutID}/`)
+}

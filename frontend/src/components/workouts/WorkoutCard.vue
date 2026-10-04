@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import CommentDialog from '@/components/social/CommentDialog.vue'
 import EditWorkoutDialog from '@/components/workouts/EditWorkoutDialog.vue'
+import WorkoutOptionsMenu from '@/components/workouts/WorkoutOptionsMenu.vue'
 import type { Comment } from '@/types/comment'
 import type { Workout } from '@/types/workout'
+import { useWorkoutStore } from '@/stores/workout'
 import { useAuthStore } from '@/stores/auth'
 
 import mock_comments from '@/assets/mockdata/mock_comments.json'
@@ -15,6 +17,8 @@ import mock_comments from '@/assets/mockdata/mock_comments.json'
 const props = defineProps<{
     workout: Workout
 }>()
+
+const workoutStore = useWorkoutStore()
 
 const userId = useAuthStore().user?.id
 
@@ -49,13 +53,21 @@ const toggleEditWorkout = () => {
     showEditWorkoutDialog.value = !showEditWorkoutDialog.value
 }
 
+async function deleteWorkout() {
+    try {
+        await workoutStore.deleteWorkout(props.workout.id)
+    } catch (error) {
+        console.error('Error deleting workout:', error)
+    }
+}
+
 </script>
 
 <template>
     <div class="workout-card bg-white p-6 rounded-lg shadow-md">
         <div class="flex items-center justify-between">
             <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.title }}</RouterLink></h3>
-            <FontAwesomeIcon v-if="showEditButton" class="text-gray-500 hover:text-blue-300" @click="toggleEditWorkout" :icon="faPen" />
+            <WorkoutOptionsMenu v-if="showEditButton" @edit="toggleEditWorkout" @delete="deleteWorkout" />
         </div>
         <p>{{  workout.started_at}}</p>
         <p>{{ workout.activity_type }}</p>

@@ -38,7 +38,7 @@ export const useWorkoutStore = defineStore('workout', () => {
 
     async function create(workout: CreateWorkout) {
         const response = await workoutService.createWorkout(workout)
-        workouts.value.push(response)
+        my_workouts.value.push(response)
         return response
     }
 
@@ -46,6 +46,11 @@ export const useWorkoutStore = defineStore('workout', () => {
         const response = await workoutService.fetchMyWorkouts()
 
         my_workouts.value = response
+    }
+
+    async function deleteWorkout(workoutID: string) {
+        await workoutService.deleteWorkout(workoutID)
+        my_workouts.value = workouts.value.filter((w) => w.id !== workoutID)
     }
 
     return{
@@ -56,6 +61,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         get,
         update,
         fetchMyWorkouts,
-        create
+        create,
+        deleteWorkout
     }
 });
