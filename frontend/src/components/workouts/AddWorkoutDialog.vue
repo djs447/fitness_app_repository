@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import type { CreateWorkout } from '@/types/workout'
+import type { WorkoutForm } from '@/types/workout'
 import { useWorkoutStore } from '@/stores/workout'
 
 const emit = defineEmits<{
@@ -9,11 +9,11 @@ const emit = defineEmits<{
 }>()
 
 const workoutStore = useWorkoutStore()
-const workout = ref<CreateWorkout>({ title: '', description: '', notes: '', distance: 0, elevation: 0, city: '', county: '', state: '', activity_type: '', duration: '', started_at: '' })
+const workout = ref<WorkoutForm>({ id: '', title: '', description: '', notes: '', distance: 0, elevation: 0, city: '', county: '', state: '', activity_type: '', durationHours: 0, durationMinutes: 0, durationSeconds: 0, started_at: '' })
 
-async function addWorkout(newWorkout: CreateWorkout) {
+async function addWorkout(newWorkout: WorkoutForm) {
     try{
-        await workoutStore.create(newWorkout)
+        await workoutStore.create({ ...newWorkout })
         emit('close')
     } catch (error) {
         console.error('Error adding workout:', error)
@@ -29,7 +29,7 @@ async function addWorkout(newWorkout: CreateWorkout) {
     @click="emit('close')"
   ></div>
 
-    <div class="bg-white fixed z-10 w-lg p-6 rounded-lg shadow-md">
+    <div class="bg-white absolute z-10 w-lg p-6 rounded-lg shadow-md">
         <h3 class="text-lg font-bold mb-4">Add Workout</h3>
         <form @submit.prevent="addWorkout(workout)">
             <div class="mb-4">
@@ -145,13 +145,36 @@ async function addWorkout(newWorkout: CreateWorkout) {
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
-                    Duration
+                    Duration (Hours)
                 </label>
                 <input
-                    id="duration"
-                    v-model="workout.duration"
+                    id="durationHours"
+                    v-model.number="workout.durationHours"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="number"
+                    min="0"
+                />
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
+                    Duration (Minutes)
+                </label>
+                <input
+                    id="durationMinutes"
+                    v-model.number="workout.durationMinutes"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    min="0"
+                    max="59"
+                />
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
+                    Duration (Seconds)
+                </label>
+                <input
+                    id="durationSeconds"
+                    v-model.number="workout.durationSeconds"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    min="0"
+                    max="59"
                 />
             </div>
             <div class="flex items-center justify-between">

@@ -18,7 +18,8 @@ interface Workout {
     user: User,
 }
 
-interface CreateWorkout {
+interface WorkoutForm {
+    id: string,
     title: string,
     description: string,
     notes: string,
@@ -29,7 +30,9 @@ interface CreateWorkout {
     state: string,
     activity_type: string,
     started_at: string,
-    duration: string,
+    durationHours: number,
+    durationMinutes: number,
+    durationSeconds: number,
 }
 
-export type { Workout, CreateWorkout };
+export type { Workout, WorkoutForm };

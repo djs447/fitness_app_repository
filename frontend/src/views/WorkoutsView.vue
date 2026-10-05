@@ -47,12 +47,12 @@ onMounted(() => {
         </button>
     </div>
     <div class="workout-list-container">
-        <WorkoutList v-if="!isLoading" :workouts="workouts" />
-        <LoadingView v-else />
         <AddWorkoutDialog
             v-if="showAddWorkoutDialog"
             @close="toggleAddWorkoutDialog"
         />
+        <WorkoutList v-if="!isLoading" :workouts="workouts" />
+        <LoadingView v-else />
     </div>
 </template>
 

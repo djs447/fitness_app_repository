@@ -36,7 +36,6 @@ a,
   flex-direction: column;
   place-items: center;
   min-height: 100vh;
-  overflow-y: auto;
   width: 100%;
 }
 

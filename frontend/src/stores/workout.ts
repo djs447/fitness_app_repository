@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 import * as workoutService from '@/services/workoutService'
 
-import type { Workout, CreateWorkout } from '@/types/workout'
+import type { Workout, WorkoutForm } from '@/types/workout'
 
 export const useWorkoutStore = defineStore('workout', () => {
 
@@ -27,16 +27,16 @@ export const useWorkoutStore = defineStore('workout', () => {
     async function update(workoutID:string, data: Partial<Workout>) {
         const response = await workoutService.updateWorkout(workoutID, data)
 
-        const index = workouts.value.findIndex((w) => w.id === workoutID)
+        const index = my_workouts.value.findIndex((w) => w.id === workoutID)
 
         if (index !== -1) {
-            workouts.value[index] = response
+            my_workouts.value[index] = response
         }
 
         workout.value = response
     }
 
-    async function create(workout: CreateWorkout) {
+    async function create(workout: WorkoutForm) {
         const response = await workoutService.createWorkout(workout)
         my_workouts.value.push(response)
         return response

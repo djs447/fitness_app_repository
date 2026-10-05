@@ -16,7 +16,7 @@ class WorkoutViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get','post'])
     def me(self, request):
         if request.method == 'GET':
-            my_workouts = Workout.objects.filter(user=request.user)
+            my_workouts = Workout.objects.filter(user=request.user).order_by('-started_at')
             serializer = WorkoutSerializer(my_workouts, many=True)
             return Response(serializer.data)
         serializer = WorkoutSerializer(data=request.data)

@@ -1,5 +1,5 @@
 import api from '@/services/api'
-import type { Workout, CreateWorkout } from '@/types/workout'
+import type { Workout, WorkoutForm } from '@/types/workout'
 
 export async function fetchWorkouts(): Promise<Array<Workout>> {
     const response = await api.get<Array<Workout>>('/workouts/')
@@ -25,10 +25,11 @@ export async function fetchMyWorkouts(): Promise<Array<Workout>> {
     return response.data
 }
 
-export async function createWorkout(workout: CreateWorkout): Promise<Workout> {
+export async function createWorkout(workout: WorkoutForm): Promise<Workout> {
     const payload = {
         ...workout,
-        started_at: new Date(workout.started_at).toISOString()
+        started_at: new Date(workout.started_at).toISOString(),
+        duration: String(workout.durationHours * 3600 + workout.durationMinutes * 60 + workout.durationSeconds)
     }
     const response = await api.post<Workout>('/workouts/me/', payload)
     return response.data

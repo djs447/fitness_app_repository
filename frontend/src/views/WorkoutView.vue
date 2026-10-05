@@ -56,7 +56,7 @@ onMounted(() => {
                 <p>{{ workout?.duration }}</p>
             </div>
             <p>{{ workout?.activity_type }}</p>
-            <p>Duration: {{ workout?.duration }} minutes</p>
+            <p>Duration: {{ workout?.duration }}</p>
             <p>Difficulty: Hard! </p>
         </div>
         <!-- TODO, add these later <EquipmentList :equipment="mock_workout.equipment" />

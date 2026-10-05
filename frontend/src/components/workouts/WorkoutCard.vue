@@ -12,7 +12,7 @@ import { useWorkoutStore } from '@/stores/workout'
 import { useAuthStore } from '@/stores/auth'
 
 import mock_comments from '@/assets/mockdata/mock_comments.json'
-
+import { verboseDateTime } from '@/services/format'
 
 const props = defineProps<{
     workout: Workout
@@ -69,9 +69,9 @@ async function deleteWorkout() {
             <h3><RouterLink :to="`/workouts/${workout.id}`">{{ workout.title }}</RouterLink></h3>
             <WorkoutOptionsMenu v-if="showEditButton" @edit="toggleEditWorkout" @delete="deleteWorkout" />
         </div>
-        <p>{{  workout.started_at}}</p>
+        <p>{{  verboseDateTime(workout.started_at) }}</p>
         <p>{{ workout.activity_type }}</p>
-        <p>Duration: {{ workout.duration }} minutes</p>
+        <p>Duration: {{ workout?.duration }}</p>
         <p>City: {{ workout.city }}</p>
         <p>County: {{ workout.county }}</p>
         <p>State: {{ workout.state }}</p>

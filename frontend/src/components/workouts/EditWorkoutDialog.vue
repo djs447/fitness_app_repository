@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import type { Workout } from '@/types/workout'
+import type { Workout, WorkoutForm } from '@/types/workout'
 import { useWorkoutStore } from '@/stores/workout'
+import { formatDateTimeLocal, parseDurationToForm } from '@/services/format'
 
 
 const props = defineProps<{
@@ -14,11 +15,22 @@ const emit = defineEmits<{
 }>()
 
 const workoutStore = useWorkoutStore()
-const editedWorkout = ref({...props.workout })
+const editedWorkout = ref(
+    {
+        ...props.workout,
+        started_at: formatDateTimeLocal(props.workout.started_at),
+        durationHours: parseDurationToForm(props.workout.duration).hours || 0,
+        durationMinutes: parseDurationToForm(props.workout.duration).minutes || 0,
+        durationSeconds: parseDurationToForm(props.workout.duration).seconds || 0,
+    }
+)
 
-async function updateWorkout(updatedWorkout: Workout) {
+async function updateWorkout(updatedWorkout: WorkoutForm) {
+
+    const duration = String(updatedWorkout.durationHours*3600 + updatedWorkout.durationMinutes*60 + updatedWorkout.durationSeconds)
     try{
-        await workoutStore.update(updatedWorkout.id, updatedWorkout)
+        const payload = { ...updatedWorkout, started_at: new Date(updatedWorkout.started_at).toISOString(), duration: duration, }
+        await workoutStore.update(updatedWorkout.id, payload)
         emit('close')
     } catch (error) {
         console.error('Error updating workout:', error)
@@ -49,14 +61,134 @@ async function updateWorkout(updatedWorkout: Workout) {
                 />
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
-                    Duration
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+                    Title
                 </label>
                 <input
-                    id="duration"
-                    v-model="editedWorkout.duration"
+                    id="title"
+                    v-model="editedWorkout.title"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description
+                </label>
+                <textarea
+                    id="description"
+                    v-model="editedWorkout.description"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                ></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="notes">
+                    Notes
+                </label>
+                <textarea
+                    id="notes"
+                    v-model="editedWorkout.notes"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                ></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="distance">
+                    Distance
+                </label>
+                <input
+                    id="distance"
+                    v-model="editedWorkout.distance"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="number"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="elevation">
+                    Elevation
+                </label>
+                <input
+                    id="elevation"
+                    v-model="editedWorkout.elevation"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                    City
+                </label>
+                <input
+                    id="city"
+                    v-model="editedWorkout.city"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="county">
+                    County
+                </label>
+                <input
+                    id="county"
+                    v-model="editedWorkout.county"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="state">
+                    State
+                </label>
+                <input
+                    id="state"
+                    v-model="editedWorkout.state"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="started_at">
+                    Started At
+                </label>
+                <input
+                    id="started_at"
+                    v-model="editedWorkout.started_at"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="datetime-local"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
+                    Duration (Hours)
+                </label>
+                <input
+                    id="durationHours"
+                    v-model.number="editedWorkout.durationHours"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    min="0"
+                />
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
+                    Duration (Minutes)
+                </label>
+                <input
+                    id="durationMinutes"
+                    v-model.number="editedWorkout.durationMinutes"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    min="0"
+                    max="59"
+                />
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">
+                    Duration (Seconds)
+                </label>
+                <input
+                    id="durationSeconds"
+                    v-model.number="editedWorkout.durationSeconds"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    min="0"
+                    max="59"
                 />
             </div>
             <div class="flex items-center justify-between">
