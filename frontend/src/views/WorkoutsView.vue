@@ -2,15 +2,47 @@
 import WorkoutList from '@/components/workouts/WorkoutList.vue';
 import AddWorkoutDialog from '@/components/workouts/AddWorkoutDialog.vue';
 import LoadingView from '@/views/LoadingView.vue';
-import { onMounted, ref, computed } from 'vue'
-import type { Workout } from '@/types/workout'
+import { onMounted, onUnmounted, ref, computed, nextTick } from 'vue'
 import { useWorkoutStore } from '@/stores/workout';
 
 const workoutStore = useWorkoutStore();
 const error = ref('');
-const workouts = computed(() => workoutStore.my_workouts)
+const workouts = computed(() => workoutStore.my_workouts ?? [])
 const showAddWorkoutDialog = ref(false);
-const isLoading = ref(true);
+const isLoading = computed(() => workoutStore.isLoading)
+const loadMoreTrigger = ref<HTMLElement | null>(null);
+const hasMore = computed(() => workoutStore.hasMore)
+let observer: IntersectionObserver | null = null;
+
+function setupObserver() {
+    observer = new IntersectionObserver(
+        async (entries) => {
+            const entry = entries[0]
+            if (!entry?.isIntersecting || isLoading.value || !hasMore.value){
+                return
+            }
+
+            await workoutStore.fetchNextPage()
+            console.log('Loading more workouts...')
+        },
+        {
+            rootMargin: '0px 0px 10px 0px',
+        }
+    )
+    if (loadMoreTrigger.value) {
+        observer.observe(loadMoreTrigger.value);
+    }
+}
+
+onMounted(async () =>{
+    await fetchMyWorkouts();
+
+    setupObserver();
+})
+
+onUnmounted(() => {
+    observer?.disconnect();
+})
 
 const toggleAddWorkoutDialog = () => {
     showAddWorkoutDialog.value = !showAddWorkoutDialog.value;
@@ -20,19 +52,12 @@ async function fetchMyWorkouts(){
     error.value = ""
 
     try{
-        isLoading.value = true
         await workoutStore.fetchMyWorkouts()
     } catch (err) {
         console.log("error", err)
         error.value = "Error fetching my workout data."
-    } finally {
-        isLoading.value = false
     }
 }
-
-onMounted(() => {
-  fetchMyWorkouts();
-})
 
 </script>
 
@@ -52,11 +77,17 @@ onMounted(() => {
             @close="toggleAddWorkoutDialog"
         />
         <WorkoutList v-if="!isLoading" :workouts="workouts" />
-        <LoadingView v-else />
+        <LoadingView v-if="isLoading" />
     </div>
+    
+    <div class="load-more-trigger" ref="loadMoreTrigger"></div>
 </template>
 
 <style scoped>
+
+.load-more-trigger {
+    height: 1px;
+}
 
 .workout-banner{
     margin: 0;

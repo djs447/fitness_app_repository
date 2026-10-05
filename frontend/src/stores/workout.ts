@@ -3,13 +3,16 @@ import { defineStore } from 'pinia';
 
 import * as workoutService from '@/services/workoutService'
 
-import type { Workout, WorkoutForm } from '@/types/workout'
+import type { Workout, WorkoutForm, PaginatedWorkouts } from '@/types/workout'
 
 export const useWorkoutStore = defineStore('workout', () => {
 
     const workout = ref<Workout | null>(null)
     const workouts = ref<Array<Workout>>([])
-    const my_workouts = ref<Array<Workout>>([])
+    const my_workouts = ref<Workout[]>([])
+    const nextPage = ref<string | null>(null)
+    const isLoading = ref(false)
+    const hasMore = ref(true)
 
     async function fetch(){
         const response = await workoutService.fetchWorkouts()
@@ -43,9 +46,34 @@ export const useWorkoutStore = defineStore('workout', () => {
     }
 
     async function fetchMyWorkouts(){
-        const response = await workoutService.fetchMyWorkouts()
 
-        my_workouts.value = response
+        try{
+            isLoading.value = true
+            const response = await workoutService.fetchMyWorkouts()
+            my_workouts.value = response.results
+            nextPage.value = response.next
+            hasMore.value = response.next !== null
+        } finally {
+            isLoading.value = false
+        }
+    }
+
+    async function fetchNextPage() {
+        if (!nextPage.value || isLoading.value) {
+            return
+        }
+
+        try {
+            const response = await workoutService.fetchMyWorkouts(nextPage.value)
+
+            my_workouts.value.push(...response.results)
+
+            nextPage.value = response.next
+            hasMore.value = response.next !== null
+
+        } finally{
+            //isLoading.value = false
+        }
     }
 
     async function deleteWorkout(workoutID: string) {
@@ -57,11 +85,14 @@ export const useWorkoutStore = defineStore('workout', () => {
         workout,
         workouts,
         my_workouts,
+        isLoading,
+        hasMore,
         fetch,
         get,
         update,
         fetchMyWorkouts,
         create,
-        deleteWorkout
+        deleteWorkout,
+        fetchNextPage,
     }
 });

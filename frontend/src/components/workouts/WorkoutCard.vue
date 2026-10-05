@@ -30,7 +30,6 @@ const comments = ref(mock_comments)
 const showCommentDialog = ref(false)
 const showEditWorkoutDialog = ref(false)
 const showEditButton = computed(() => {
-    console.log(props.workout)
     return props.workout?.user?.id === userId
 })
 

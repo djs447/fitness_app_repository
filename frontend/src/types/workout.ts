@@ -35,4 +35,11 @@ interface WorkoutForm {
     durationSeconds: number,
 }
 
-export type { Workout, WorkoutForm };
+interface PaginatedWorkouts {
+    results: Array<Workout>,
+    next: string | null,
+    count: number,
+    previous: string | null,
+}
+
+export type { Workout, WorkoutForm, PaginatedWorkouts };

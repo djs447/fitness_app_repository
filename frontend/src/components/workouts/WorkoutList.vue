@@ -25,8 +25,7 @@ defineProps<{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
 }
 
 .workout-card {
