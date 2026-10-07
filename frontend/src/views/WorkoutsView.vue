@@ -22,7 +22,7 @@ function setupObserver() {
                 return
             }
 
-            await workoutStore.fetchNextPage()
+            await workoutStore.fetchMyNextPage()
             console.log('Loading more workouts...')
         },
         {

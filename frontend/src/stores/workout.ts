@@ -15,9 +15,17 @@ export const useWorkoutStore = defineStore('workout', () => {
     const hasMore = ref(true)
 
     async function fetch(){
-        const response = await workoutService.fetchWorkouts()
 
-        workouts.value = response
+        try{
+            isLoading.value = true
+            const response = await workoutService.fetchWorkouts()
+            workouts.value = response.results
+            nextPage.value = response.next
+            hasMore.value = response.next !== null
+        } finally {
+            isLoading.value = false
+        }
+
     }
 
     async function get(workoutID: string | string[] | undefined) {
@@ -58,7 +66,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         }
     }
 
-    async function fetchNextPage() {
+    async function fetchMyNextPage() {
         if (!nextPage.value || isLoading.value) {
             return
         }
@@ -75,6 +83,25 @@ export const useWorkoutStore = defineStore('workout', () => {
             //isLoading.value = false
         }
     }
+
+    async function fetchNextPage() {
+        if (!nextPage.value || isLoading.value) {
+            return
+        }
+
+        try {
+            const response = await workoutService.fetchWorkouts(nextPage.value)
+
+            workouts.value.push(...response.results)
+
+            nextPage.value = response.next
+            hasMore.value = response.next !== null
+
+        } finally{
+            //isLoading.value = false
+        }
+    }
+
 
     async function deleteWorkout(workoutID: string) {
         await workoutService.deleteWorkout(workoutID)
@@ -94,5 +121,6 @@ export const useWorkoutStore = defineStore('workout', () => {
         create,
         deleteWorkout,
         fetchNextPage,
+        fetchMyNextPage,
     }
 });

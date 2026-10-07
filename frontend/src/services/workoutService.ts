@@ -1,9 +1,8 @@
 import api from '@/services/api'
 import type { PaginatedWorkouts, Workout, WorkoutForm } from '@/types/workout'
 
-export async function fetchWorkouts(): Promise<Array<Workout>> {
-    const response = await api.get<Array<Workout>>('/workouts/')
-    console.log(response.data)
+export async function fetchWorkouts(url: string = '/workouts/'): Promise<PaginatedWorkouts> {
+    const response = await api.get<PaginatedWorkouts>(url)
     return response.data
 }
 
