@@ -2,27 +2,19 @@
 
 import { onMounted, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import mock_comments from '@/assets/mockdata/mock_comments.json';
 
-import type { Comment } from '@/types/comment.ts';
 import CommentDialog from '@/components/social/CommentDialog.vue';
 import { useWorkoutStore } from '@/stores/workout';
 import ExerciseList from '@/components/workouts/ExerciseList.vue';
 import EquipmentList from '@/components/workouts/EquipmentList.vue';
-import type { Workout } from '@/types/workout';
-import WorkoutsView from './WorkoutsView.vue';
-import { fetchWorkouts } from '@/services/workoutService';
 
-const comments = ref(mock_comments);
+
 const showCommentDialog = ref(false);
 const workoutStore = useWorkoutStore();
 const route = useRoute();
 const error = ref('');
 const workout = computed(() => workoutStore.workout)
 
-const addComment = (comment: Comment) => {
-    comments.value.push(comment)
-}
 const toggleCommentDialog = () => {
     showCommentDialog.value = !showCommentDialog.value
 }
@@ -65,7 +57,7 @@ onMounted(() => {
             <button @click="toggleCommentDialog" class="text-orange-500 hover:text-blue-300 mb-2">View Comments</button>
         </div>
     </div>
-    <CommentDialog v-if="showCommentDialog" :comments="comments" :showCommentDialog="showCommentDialog" @addComment="addComment" @showCommentDialog="toggleCommentDialog"/>
+    <CommentDialog v-if="showCommentDialog" :workoutId="workout?.id || ''" :showCommentDialog="showCommentDialog" @showCommentDialog="toggleCommentDialog"/>
 </template>
 
 <style scoped>

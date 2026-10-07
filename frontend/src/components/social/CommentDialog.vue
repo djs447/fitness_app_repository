@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useCommentStore } from '@/stores/comments'
+import { useAuthStore } from '@/stores/auth'
+import type { Comment } from '@/types/comment'
+
+const commentStore = useCommentStore()
+const authStore = useAuthStore()
 
 const toggleCommentDialog = () => {
   emit('showCommentDialog', !showComments.value)
@@ -7,33 +13,38 @@ const toggleCommentDialog = () => {
 
 const showComments = ref(false)
 const newComment = ref('')
+const comments = computed(() => commentStore.comments ?? [])
 
-defineProps<{
-  comments: Array<{
-    id: number,
-    author: string,
-    text: string,
-    workoutId: number,
-  }>
-
+const props = defineProps<{
+  workoutId: string,
   showCommentDialog: boolean,
-
 }>()
 
 const emit = defineEmits<{
-    addComment: [comment: { id: number, author: string, text: string, workoutId: number }]
-    showCommentDialog: [show: boolean]
+  showCommentDialog: [show: boolean]
 }>()
 
-function addComment(){
-    /*
-    TODO Update author
-    */
-    if (newComment.value.trim() !== '') {
-        emit('addComment', { id: Date.now(), author: 'User', text: newComment.value, workoutId: 1 })
-        newComment.value = ''
-    }
+async function addComment(){
+  try{
+      console.log(props.workoutId)
+      await commentStore.addComment({ workout: props.workoutId, content: newComment.value })
+      newComment.value = ''
+  } catch (error) {
+      console.error('Error adding comment:', error)
+  }
 }
+
+async function getComments(){
+  try{
+      await commentStore.getComments(props.workoutId)
+  } catch (error) {
+      console.error('Error fetching comments:', error)
+  }
+}
+
+onMounted(() => {
+  getComments()
+})
 
 </script>
 
@@ -66,21 +77,21 @@ function addComment(){
 
     <div class="max-h-80 overflow-y-auto">
       <div
-        v-for="comment in comments"
+        v-for="comment in comments.value"
         :key="comment.id"
         class="mb-4 border-b pb-3"
       >
         <p class="font-semibold">
-          {{ comment.author }}
+          {{ comment.username }}
         </p>
 
         <p class="text-gray-600">
-          {{ comment.text }}
+          {{ comment.content }}
         </p>
       </div>
 
       <p
-        v-if="comments.length === 0"
+        v-if="comments.value.length === 0"
         class="text-gray-500"
       >
         No comments yet.

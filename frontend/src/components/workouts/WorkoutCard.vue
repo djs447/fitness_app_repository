@@ -10,6 +10,7 @@ import type { Comment } from '@/types/comment'
 import type { Workout } from '@/types/workout'
 import { useWorkoutStore } from '@/stores/workout'
 import { useAuthStore } from '@/stores/auth'
+import { useCommentStore } from '@/stores/comments'
 
 import mock_comments from '@/assets/mockdata/mock_comments.json'
 import { verboseDateTime } from '@/services/format'
@@ -19,6 +20,7 @@ const props = defineProps<{
 }>()
 
 const workoutStore = useWorkoutStore()
+const commentStore = useCommentStore()
 
 const userId = useAuthStore().user?.id
 
@@ -45,9 +47,6 @@ const toggleLike = () => {
     liked.value = !liked.value
 }
 
-const addComment = (comment: Comment) => {
-    comments.value.push(comment)
-}
 const toggleEditWorkout = () => {
     showEditWorkoutDialog.value = !showEditWorkoutDialog.value
 }
@@ -80,7 +79,7 @@ async function deleteWorkout() {
             <button @click="toggleShareDialog" class="hover:text-blue-300 mb-2">Share</button>
         </div>
     </div>
-    <CommentDialog v-if="showCommentDialog" :comments="comments" :showCommentDialog="showCommentDialog" @addComment="addComment" @showCommentDialog="toggleCommentDialog"/>
+    <CommentDialog v-if="showCommentDialog" :showCommentDialog="showCommentDialog" :workoutId="workout.id" @showCommentDialog="toggleCommentDialog"/>
     <EditWorkoutDialog v-if="showEditWorkoutDialog" :workout="workout" @close="toggleEditWorkout"/>
 </template>
 

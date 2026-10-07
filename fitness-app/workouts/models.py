@@ -21,7 +21,7 @@ class Workout(SoftDeletableBaseModel):
     difficulty = models.CharField(choices=WorkoutDifficultyChoices, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.full_name} - {self.activity_type}"
+        return f"{self.user.full_name} - {self.activity_type} - {self.title}"
 
     @property
     def average_pace(self):
@@ -52,3 +52,11 @@ class WorkoutSample(BaseModel):
 
     def __str__(self):
         return f"{self.workout} - {self.timestamp}"
+
+class Comment(SoftDeletableBaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name="comments")
+    content = models.TextField()
+
+    def __str__(self):
+        return f"{self.user.full_name} - {self.workout} - {self.content[:50]}..."

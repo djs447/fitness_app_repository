@@ -4,9 +4,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from workouts.api.serializers import WorkoutSerializer, WorkoutSampleSerializer
+from workouts.api.serializers import WorkoutSerializer, WorkoutSampleSerializer, CommentSerializer
 from workouts.api.permissions import IsOwnerOrReadOnly
-from workouts.models import Workout, WorkoutSample
+from workouts.models import Workout, WorkoutSample, Comment
 
 
 class WorkoutPagination(PageNumberPagination):
@@ -33,9 +33,28 @@ class WorkoutViewSet(viewsets.ModelViewSet):
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @action(detail=True, methods=['get','post'])
+    def comments(self, request, pk=None):
+        workout = self.get_object()
+        if request.method == 'GET':
+            comments = Comment.objects.filter(workout=workout)
+            serializer = CommentSerializer(comments, many=True)
+            return Response(serializer.data)
+        elif request.method == 'POST':
+            serializer = CommentSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=request.user, workout=workout)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class WorkoutSampleViewSet(viewsets.ModelViewSet):
 
     queryset = WorkoutSample.objects.all()
     serializer_class = WorkoutSampleSerializer
     permission_classes = []
+
+class CommentViewSet(viewsets.ModelViewSet):
+
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]

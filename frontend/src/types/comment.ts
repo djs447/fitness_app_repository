@@ -1,8 +1,15 @@
 interface Comment {
     id: number;
-    author: string;
-    text: string;
-    workoutId: number;
+    created: string;
+    modified: string;
+    username: string;
+    content: string;
+    workoutId: string;
 }
 
-export type { Comment };
+interface CommentData {
+    workout: string;
+    content: string;
+}
+
+export type { Comment, CommentData };

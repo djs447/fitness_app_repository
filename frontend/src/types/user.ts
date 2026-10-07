@@ -2,6 +2,7 @@ interface User {
     id: number
     user: string
     email: string
+    display_name: string
     first_name: string
     last_name: string
     profile: string
