@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -18,7 +18,7 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 
     queryset = Workout.objects.all()
     serializer_class = WorkoutSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
     pagination_class = WorkoutPagination
 
     @action(detail=False, methods=['get','post'])
@@ -45,6 +45,20 @@ class WorkoutViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user, workout=workout)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(
+        detail=True,
+        methods=['patch'],
+        url_path=r'comments/(?P<comment_id>[^/.]+)',
+        url_name='comment-detail',
+    )
+    def edit_comment(self, request, pk=None, comment_id=None):
+        workout = self.get_object()
+        comment = get_object_or_404(Comment, id=comment_id, workout=workout, user=request.user)
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class WorkoutSampleViewSet(viewsets.ModelViewSet):

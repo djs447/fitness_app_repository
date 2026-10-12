@@ -1,10 +1,14 @@
 interface Comment {
-    id: number;
+    id: string;
     created: string;
     modified: string;
     username: string;
     content: string;
-    workoutId: string;
+    workout: string;
+    user: {
+        username: string;
+        id: number;
+    };
 }
 
 interface CommentData {
@@ -12,4 +16,10 @@ interface CommentData {
     content: string;
 }
 
-export type { Comment, CommentData };
+interface EditCommentData {
+    id: string;
+    content: string;
+    workout: string;
+}
+
+export type { Comment, CommentData, EditCommentData };

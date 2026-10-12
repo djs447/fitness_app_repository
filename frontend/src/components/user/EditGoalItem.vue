@@ -17,7 +17,7 @@ const emits = defineEmits<{
     close: []
 }>()
 
- async function updateGoal(updatedGoal: Goal) {
+async function updateGoal(updatedGoal: Goal) {
     try{
         await profileStore.updateGoal(editedGoal.value.id, updatedGoal)
         emits('edit', props.goal.id)

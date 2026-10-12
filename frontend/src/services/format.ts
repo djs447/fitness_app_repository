@@ -27,3 +27,14 @@ export const parseDurationToForm = (duration:string) => {
     const [hours, minutes, seconds] = duration.split(':').map(Number)
     return { hours, minutes, seconds }
 }
+
+export const formatCommentDateTimeLocal = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    })
+}

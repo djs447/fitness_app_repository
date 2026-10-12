@@ -2,7 +2,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useCommentStore } from '@/stores/comments'
 import { useAuthStore } from '@/stores/auth'
-import type { Comment } from '@/types/comment'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
+import CommentItem from '@/components/social/CommentItem.vue'
+import EditCommentItem from '@/components/social/EditCommentItem.vue'
 
 const commentStore = useCommentStore()
 const authStore = useAuthStore()
@@ -14,6 +17,7 @@ const toggleCommentDialog = () => {
 const showComments = ref(false)
 const newComment = ref('')
 const comments = computed(() => commentStore.comments ?? [])
+const editingCommentId = ref<string | null>(null)
 
 const props = defineProps<{
   workoutId: string,
@@ -39,6 +43,19 @@ async function getComments(){
       await commentStore.getComments(props.workoutId)
   } catch (error) {
       console.error('Error fetching comments:', error)
+  }
+}
+
+async function toggleEditComment(commentId: string) {
+  editingCommentId.value = editingCommentId.value === commentId ? null : commentId;
+  console.log(`Toggling edit mode for comment ${commentId}`)
+}
+
+async function deleteComment(commentId: string) {
+  try {
+    await commentStore.deleteComment(commentId)
+  } catch (error) {
+    console.error('Error deleting comment:', error)
   }
 }
 
@@ -81,13 +98,10 @@ onMounted(() => {
         :key="comment.id"
         class="mb-4 border-b pb-3"
       >
-        <p class="font-semibold">
-          {{ comment.username }}
-        </p>
 
-        <p class="text-gray-600">
-          {{ comment.content }}
-        </p>
+        <CommentItem v-if="editingCommentId !== comment.id" :comment="comment" @edit="toggleEditComment" @delete="deleteComment"/>
+        <EditCommentItem v-else :comment="comment" @edit="toggleEditComment" />
+
       </div>
 
       <p

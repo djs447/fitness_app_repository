@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CommentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username']
+        fields = ['username','id']
         #TODO Consider other fields
 
 class WorkoutUserSerializer(serializers.ModelSerializer):
