@@ -2,7 +2,8 @@ interface Profile {
     userID: string,
     display_name: string,
     bio: string,
-    goals: Goal[]
+    goals: Goal[],
+    profile_picture: string | null,
 }
 
 interface Goal {

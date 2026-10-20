@@ -3,6 +3,7 @@
 import { ref, onMounted, computed } from 'vue';
 
 import { useProfileStore } from '@/stores/profile';
+import ProfilePicture from '@/components/user/profilePicture.vue';
 import LoadingView from './LoadingView.vue';
 import GoalItem from '@/components/user/GoalItem.vue';
 import EditGoalItem from '@/components/user/EditGoalItem.vue';
@@ -73,6 +74,7 @@ onMounted(() => {
     <div v-if="!isLoading" class="profile-container rounded-2xl">
         <h1 class="text-2xl font-bold mb-4 text-center">Profile</h1>
         <div class="profile-info">
+            <ProfilePicture :profile-picture="profile?.profile_picture ?? null"/> <!--Add default prof picture -->
             <div class="contact-info">
                 <p><strong>Name:</strong> {{ profile?.display_name }}</p>
             </div>

@@ -28,3 +28,12 @@ export async function createGoal(data: Partial<Goal>): Promise<Goal> {
 export async function deleteGoal(goalId: string): Promise<void> {
     await api.delete(`/goals/${goalId}/`)
 }
+
+export async function uploadProfilePicture(file: File): Promise<Profile> {
+    const formData = new FormData()
+    formData.append('profile_picture', file)
+
+    const response = await api.patch<Profile>('/users/profiles/me/update_picture/', formData)
+
+    return response.data
+}

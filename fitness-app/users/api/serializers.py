@@ -5,6 +5,7 @@ from users.models import Goal, Profile, User
 class ProfileSerializer(serializers.ModelSerializer):
 
     goals = serializers.SerializerMethodField()
+    profile_picture = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Profile
@@ -12,6 +13,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_goals(self, obj):
         return GoalSerializer(obj.goals.all(), many=True).data
+
+    def validate_profile_picture(self, value):
+        #TODO Add more validation (requiest-size limits, image re-encoding / content verification)
+        #TODO Add clean-up logic for old profile pictures
+        if value is not None and value.size > 5 * 1024 * 1024:
+            raise serializers.ValidationError("Profile picture must be less than 5MB.")
+        return value
 
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:

@@ -26,7 +26,7 @@ class Profile(BaseModel):
     display_name = models.CharField(blank = True, null=True, max_length=32)
     bio = models.TextField(blank = True, null = True)
     unit_system = models.CharField(max_length=20, choices=UNIT_SYSTEM_CHOICES, default="metric")
-    #TODO Add profile picture
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
     def __str__(self):
         return self.display_name
