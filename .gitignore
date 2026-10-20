@@ -9,7 +9,7 @@ secrets.json
 
 node_modules/
 
-media/*
+/fitness_app/media/
 
 dist/
 build
