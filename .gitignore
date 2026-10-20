@@ -9,6 +9,8 @@ secrets.json
 
 node_modules/
 
+media/*
+
 dist/
 build
 out/
