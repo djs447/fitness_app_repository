@@ -60,3 +60,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
+class LikeUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+
+class LikeWorkoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = "Workout"
+        fields = ['id', 'name']
+
+class LikeSerializer(serializers.ModelSerializer):
+    user = LikeUserSerializer(read_only=True)
+    workout = LikeWorkoutSerializer(read_only=True)
+
+    class Meta:
+        model = "Like"
+        fields = '__all__'
+        read_only_fields = ['user', 'workout']
+

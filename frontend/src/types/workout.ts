@@ -16,6 +16,8 @@ interface Workout {
     started_at: string,
     duration: string,
     user: User,
+    like_count: number,
+    is_liked: boolean,
 }
 
 interface WorkoutForm {
@@ -35,6 +37,10 @@ interface WorkoutForm {
     durationSeconds: number,
 }
 
+interface LikeResponse {
+    liked: boolean,
+}
+
 interface PaginatedWorkouts {
     results: Array<Workout>,
     next: string | null,
@@ -42,4 +48,4 @@ interface PaginatedWorkouts {
     previous: string | null,
 }
 
-export type { Workout, WorkoutForm, PaginatedWorkouts };
+export type { Workout, WorkoutForm, PaginatedWorkouts, LikeResponse };

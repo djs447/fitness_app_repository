@@ -108,6 +108,22 @@ export const useWorkoutStore = defineStore('workout', () => {
         my_workouts.value = workouts.value.filter((w) => w.id !== workoutID)
     }
 
+    async function likeWorkout(workoutID: string) {
+        const response = await workoutService.likeWorkout(workoutID)
+        const workout = my_workouts.value.find((w) => w.id === workoutID)
+        if (workout) {
+            workout.is_liked = response.liked
+        }
+    }
+
+    async function unlikeWorkout(workoutID: string) {
+        const response = await workoutService.unlikeWorkout(workoutID)
+        const workout = my_workouts.value.find((w) => w.id === workoutID)
+        if (workout) {
+            workout.is_liked = response.liked
+        }
+    }
+
     return{
         workout,
         workouts,
@@ -120,6 +136,8 @@ export const useWorkoutStore = defineStore('workout', () => {
         fetchMyWorkouts,
         create,
         deleteWorkout,
+        likeWorkout,
+        unlikeWorkout,
         fetchNextPage,
         fetchMyNextPage,
     }

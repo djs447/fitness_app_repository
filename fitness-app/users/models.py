@@ -30,3 +30,25 @@ class Profile(BaseModel):
 
     def __str__(self):
         return self.display_name
+
+class Like(models.Model):
+    user = models.ForeignKey(
+       User,
+       on_delete=models.CASCADE,
+       related_name="workout_likes"
+    )
+    workout = models.ForeignKey(
+        "workouts.Workout",
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'workout'], name='unique_user_workout_like')
+        ]
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user} likes {self.workout}"

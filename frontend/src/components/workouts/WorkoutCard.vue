@@ -24,11 +24,9 @@ const commentStore = useCommentStore()
 
 const userId = useAuthStore().user?.id
 
-const liked = ref(false)
-const likes = ref(0)
+const liked = ref(props.workout.is_liked)
+const likes = ref(props.workout.like_count)
 
-const newComment = ref('')
-const comments = ref(mock_comments)
 const showCommentDialog = ref(false)
 const showEditWorkoutDialog = ref(false)
 const showEditButton = computed(() => {
@@ -43,8 +41,21 @@ const toggleCommentDialog = () => {
 const toggleShareDialog = () => {
     showShareDialog.value = !showShareDialog.value
 }
-const toggleLike = () => {
-    liked.value = !liked.value
+const toggleLike = async () => {
+    try {
+        console.log(liked.value)
+        if (liked.value) {
+            await workoutStore.unlikeWorkout(props.workout.id)
+            liked.value = false
+            likes.value--
+        } else {
+            await workoutStore.likeWorkout(props.workout.id)
+            liked.value = true
+            likes.value++
+        }
+    } catch (error) {
+        console.error('Error toggling like:', error)
+    }
 }
 
 const toggleEditWorkout = () => {
@@ -74,7 +85,7 @@ async function deleteWorkout() {
         <p>County: {{ workout.county }}</p>
         <p>State: {{ workout.state }}</p>
         <div class="workout-social">
-            <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }}</button>
+            <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }} ({{ likes }})</button>
             <button @click="toggleCommentDialog" class="hover:text-blue-300 mb-2">Comment</button>
             <button @click="toggleShareDialog" class="hover:text-blue-300 mb-2">Share</button>
         </div>

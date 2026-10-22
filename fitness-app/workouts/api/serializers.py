@@ -6,6 +6,8 @@ class WorkoutSerializer(serializers.ModelSerializer):
 
     pace = serializers.SerializerMethodField()
     user = WorkoutUserSerializer(read_only=True)
+    like_count = serializers.IntegerField(read_only=True)
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Workout
@@ -14,6 +16,9 @@ class WorkoutSerializer(serializers.ModelSerializer):
 
     def get_pace(self, obj):
         return obj.average_pace
+
+    def get_is_liked(self, obj):
+        return getattr(obj, "is_liked", False)
 
 class WorkoutSampleSerializer(serializers.ModelSerializer):
     class Meta:
