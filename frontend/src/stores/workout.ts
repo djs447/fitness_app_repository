@@ -4,12 +4,14 @@ import { defineStore } from 'pinia';
 import * as workoutService from '@/services/workoutService'
 
 import type { Workout, WorkoutForm, PaginatedWorkouts } from '@/types/workout'
+import type { Like } from '@/types/user';
 
 export const useWorkoutStore = defineStore('workout', () => {
 
     const workout = ref<Workout | null>(null)
     const workouts = ref<Array<Workout>>([])
     const my_workouts = ref<Workout[]>([])
+    const likes = ref<Array<Like>>([])
     const nextPage = ref<string | null>(null)
     const isLoading = ref(false)
     const hasMore = ref(true)
@@ -124,8 +126,15 @@ export const useWorkoutStore = defineStore('workout', () => {
         }
     }
 
+    async function fetchLikes(workoutID: string) {
+        const response = await workoutService.fetchLikes(workoutID)
+        likes.value = response
+        console.log("Fetched likes for workout:", workoutID, likes.value)
+    }
+
     return{
         workout,
+        likes,
         workouts,
         my_workouts,
         isLoading,
@@ -140,5 +149,6 @@ export const useWorkoutStore = defineStore('workout', () => {
         unlikeWorkout,
         fetchNextPage,
         fetchMyNextPage,
+        fetchLikes,
     }
 });

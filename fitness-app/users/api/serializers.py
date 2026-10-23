@@ -1,6 +1,7 @@
 
 from rest_framework import serializers
-from users.models import Goal, Profile, User
+from users.models import Goal, Profile, User, Like
+from workouts.models import Workout
 
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -67,15 +68,15 @@ class LikeUserSerializer(serializers.ModelSerializer):
 
 class LikeWorkoutSerializer(serializers.ModelSerializer):
     class Meta:
-        model = "Workout"
-        fields = ['id', 'name']
+        model = Workout
+        fields = ['id', 'title']
 
 class LikeSerializer(serializers.ModelSerializer):
     user = LikeUserSerializer(read_only=True)
     workout = LikeWorkoutSerializer(read_only=True)
 
     class Meta:
-        model = "Like"
+        model = Like
         fields = '__all__'
         read_only_fields = ['user', 'workout']
 

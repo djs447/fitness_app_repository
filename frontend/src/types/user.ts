@@ -8,4 +8,19 @@ interface User {
     profile: string
 }
 
-export type { User };
+interface LikeUser {
+    id: number
+    username: string
+}
+
+interface LikeWorkout {
+    id: number
+    title: string
+}
+
+interface Like {
+    user: LikeUser
+    workout: LikeWorkout
+}
+
+export type { User, Like, LikeUser, LikeWorkout };

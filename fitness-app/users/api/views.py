@@ -29,8 +29,6 @@ class GoalViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        print("Creating new goal")
-        print(self.request.user.profile)
         serializer.save(profile=self.request.user.profile)
 
     def post(self, request):

@@ -33,7 +33,6 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
         if user.is_authenticated:
-            print("yep")
             queryset = queryset.annotate(
                 is_liked=Exists(
                     Like.objects.filter(

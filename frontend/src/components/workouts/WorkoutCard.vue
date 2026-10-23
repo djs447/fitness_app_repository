@@ -1,18 +1,19 @@
 <script setup lang="ts">
 
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import CommentDialog from '@/components/social/CommentDialog.vue'
 import EditWorkoutDialog from '@/components/workouts/EditWorkoutDialog.vue'
 import WorkoutOptionsMenu from '@/components/workouts/WorkoutOptionsMenu.vue'
+import LikeDialog from '@/components/social/LikeDialog.vue'
 import type { Comment } from '@/types/comment'
 import type { Workout } from '@/types/workout'
+import type { Like } from '@/types/user'
 import { useWorkoutStore } from '@/stores/workout'
 import { useAuthStore } from '@/stores/auth'
 import { useCommentStore } from '@/stores/comments'
 
-import mock_comments from '@/assets/mockdata/mock_comments.json'
 import { verboseDateTime } from '@/services/format'
 
 const props = defineProps<{
@@ -20,12 +21,12 @@ const props = defineProps<{
 }>()
 
 const workoutStore = useWorkoutStore()
-const commentStore = useCommentStore()
 
 const userId = useAuthStore().user?.id
 
 const liked = ref(props.workout.is_liked)
-const likes = ref(props.workout.like_count)
+const like_count = ref(props.workout.like_count)
+const likes = ref<Array<Like>>([])
 
 const showCommentDialog = ref(false)
 const showEditWorkoutDialog = ref(false)
@@ -34,6 +35,7 @@ const showEditButton = computed(() => {
 })
 
 const showShareDialog = ref(false)
+const showLikeDialog = ref(false)
 
 const toggleCommentDialog = () => {
     showCommentDialog.value = !showCommentDialog.value
@@ -41,17 +43,30 @@ const toggleCommentDialog = () => {
 const toggleShareDialog = () => {
     showShareDialog.value = !showShareDialog.value
 }
+const toggleLikeDialog = async () => {
+    if (showLikeDialog.value) {
+        showLikeDialog.value = false
+        return
+    }
+    try{
+        await workoutStore.fetchLikes(props.workout.id)
+        likes.value = [...workoutStore.likes]
+        showLikeDialog.value = true
+    } catch (error) {
+        console.error('Error fetching likes:', error)
+    }
+}
 const toggleLike = async () => {
     try {
         console.log(liked.value)
         if (liked.value) {
             await workoutStore.unlikeWorkout(props.workout.id)
             liked.value = false
-            likes.value--
+            like_count.value--
         } else {
             await workoutStore.likeWorkout(props.workout.id)
             liked.value = true
-            likes.value++
+            like_count.value++
         }
     } catch (error) {
         console.error('Error toggling like:', error)
@@ -85,13 +100,17 @@ async function deleteWorkout() {
         <p>County: {{ workout.county }}</p>
         <p>State: {{ workout.state }}</p>
         <div class="workout-social">
-            <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }} ({{ likes }})</button>
+            <div>
+                <button @click="toggleLike" class="hover:text-blue-300 mb-2">{{ liked ? 'Liked' : 'Like' }}</button>
+                <button @click="toggleLikeDialog" class="hover:text-blue-300 mb-2">({{ like_count }})</button>
+            </div>
             <button @click="toggleCommentDialog" class="hover:text-blue-300 mb-2">Comment</button>
             <button @click="toggleShareDialog" class="hover:text-blue-300 mb-2">Share</button>
         </div>
     </div>
     <CommentDialog v-if="showCommentDialog" :showCommentDialog="showCommentDialog" :workoutId="workout.id" @showCommentDialog="toggleCommentDialog"/>
     <EditWorkoutDialog v-if="showEditWorkoutDialog" :workout="workout" @close="toggleEditWorkout"/>
+    <LikeDialog v-if="showLikeDialog" :showLikeDialog="showLikeDialog" :likes="likes" @showLikeDialog="toggleLikeDialog"/>
 </template>
 
 <style scoped>
