@@ -20,8 +20,11 @@ class Workout(SoftDeletableBaseModel):
     state = USStateField(blank=True, null=True)
     difficulty = models.CharField(choices=WorkoutDifficultyChoices, blank=True, null=True)
 
+    source_file = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    source_file_hash = models.CharField(max_length=64, blank=True, null = True, unique=True)
+
     def __str__(self):
-        return f"{self.user.full_name} - {self.activity_type} - {self.title}"
+        return f"{self.activity_type} - {self.title}"
 
     @property
     def average_pace(self):
@@ -44,11 +47,19 @@ class WorkoutSample(BaseModel):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name="samples")
     timestamp = models.DateTimeField()
 
-    heart_rate = models.PositiveSmallIntegerField()
-    speed = models.FloatField()
-    cadence = models.PositiveSmallIntegerField()
-    power = models.PositiveSmallIntegerField()
-    elevation = models.FloatField()
+    heart_rate = models.PositiveSmallIntegerField(null=True, blank=True)
+    speed = models.FloatField(null=True, blank=True)
+    cadence = models.PositiveSmallIntegerField(null=True, blank=True)
+    power = models.PositiveSmallIntegerField(null=True, blank=True)
+    elevation = models.FloatField(null=True, blank=True)
+
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['workout', 'timestamp'], name='unique_workout_timestamp')
+        ]
 
     def __str__(self):
         return f"{self.workout} - {self.timestamp}"
@@ -59,4 +70,4 @@ class Comment(SoftDeletableBaseModel):
     content = models.TextField()
 
     def __str__(self):
-        return f"{self.user.full_name} - {self.workout} - {self.content[:50]}..."
+        return f"{self.workout} - {self.content[:50]}..."

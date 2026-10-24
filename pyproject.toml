@@ -15,6 +15,7 @@ dependencies = [
     "django-cors-headers (>=4.9.0,<5.0.0)",
     "django-localflavor (>=5.1,<6.0)",
     "pillow (>=13.0.0,<14.0.0)",
+    "fitparse (>=1.2.0,<2.0.0)",
 ]
 
 

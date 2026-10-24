@@ -116,6 +116,18 @@ class WorkoutViewSet(viewsets.ModelViewSet):
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
 
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path='route',
+        url_name='route',
+    )
+    def route(self, request, pk=None):
+        workout = self.get_object()
+        points = workout.samples.all()
+        serializer = WorkoutSampleSerializer(points, many=True)
+        return Response(serializer.data)
+
 
 class WorkoutSampleViewSet(viewsets.ModelViewSet):
 

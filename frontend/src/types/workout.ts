@@ -41,6 +41,13 @@ interface LikeResponse {
     liked: boolean,
 }
 
+interface WorkoutSample {
+    timestamp: string,
+    latitude: number,
+    longitude: number,
+    elevation: number | null,
+}
+
 interface PaginatedWorkouts {
     results: Array<Workout>,
     next: string | null,
@@ -48,4 +55,4 @@ interface PaginatedWorkouts {
     previous: string | null,
 }
 
-export type { Workout, WorkoutForm, PaginatedWorkouts, LikeResponse };
+export type { Workout, WorkoutForm, PaginatedWorkouts, LikeResponse, WorkoutSample };

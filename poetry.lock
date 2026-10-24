@@ -100,6 +100,17 @@ files = [
 django = ">=5.2"
 
 [[package]]
+name = "fitparse"
+version = "1.2.0"
+description = "Python library to parse ANT/Garmin .FIT files"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "fitparse-1.2.0.tar.gz", hash = "sha256:2d691022452dea6dabad13cc6e017ca467fe8a3a895cd3ac67a50a7bb716b4a9"},
+]
+
+[[package]]
 name = "pillow"
 version = "13.0.0"
 description = "Python Imaging Library (fork)"
@@ -299,4 +310,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "144bc371955c202a4abbd4cd3eabddab167e215874b86fda932b2d4207e01a41"
+content-hash = "523b42a32505f485d4862b39d7ec2f5db877d4043e29464ed4fb9921f515db8d"

@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router';
 
 import CommentDialog from '@/components/social/CommentDialog.vue';
 import { useWorkoutStore } from '@/stores/workout';
+import WorkoutRouteMap from '@/components/workouts/WorkoutRouteMap.vue'
 import ExerciseList from '@/components/workouts/ExerciseList.vue';
 import EquipmentList from '@/components/workouts/EquipmentList.vue';
 
@@ -53,6 +54,7 @@ onMounted(() => {
         </div>
         <!-- TODO, add these later <EquipmentList :equipment="mock_workout.equipment" />
         <ExerciseList :exercises="mock_workout.exercises" /> -->
+        <WorkoutRouteMap v-if="workout?.id" :workoutId="workout.id || ''" />
         <div class="workout-social">
             <button @click="toggleCommentDialog" class="text-orange-500 hover:text-blue-300 mb-2">View Comments</button>
         </div>

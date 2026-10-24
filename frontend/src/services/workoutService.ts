@@ -1,5 +1,5 @@
 import api from '@/services/api'
-import type { PaginatedWorkouts, Workout, WorkoutForm, LikeResponse } from '@/types/workout'
+import type { PaginatedWorkouts, Workout, WorkoutForm, LikeResponse, WorkoutSample } from '@/types/workout'
 import type { Like } from '@/types/user'
 
 export async function fetchWorkouts(url: string = '/workouts/'): Promise<PaginatedWorkouts> {
@@ -50,5 +50,10 @@ export async function unlikeWorkout(workoutID: string): Promise<LikeResponse> {
 
 export async function fetchLikes(workoutID: string): Promise<Like[]> {
     const response = await api.get<Like[]>('/workouts/' + workoutID + '/likes/')
+    return response.data
+}
+
+export async function fetchWorkoutRoute(workoutID: string): Promise<WorkoutSample[]> {
+    const response = await api.get<WorkoutSample[]>('/workouts/' + workoutID + '/route/')
     return response.data
 }
