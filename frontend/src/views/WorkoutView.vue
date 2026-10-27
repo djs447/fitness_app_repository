@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import CommentDialog from '@/components/social/CommentDialog.vue';
 import { useWorkoutStore } from '@/stores/workout';
 import WorkoutRouteMap from '@/components/workouts/WorkoutRouteMap.vue'
+import { verboseDateTime, formatDuration, formatPace } from '@/services/format.ts';
 import ExerciseList from '@/components/workouts/ExerciseList.vue';
 import EquipmentList from '@/components/workouts/EquipmentList.vue';
 
@@ -42,15 +43,18 @@ onMounted(() => {
         <RouterLink class="router-link text-black" to="/workouts">← Back</RouterLink>
     </div>
     <div class="workout-container rounded-lg border-l-gray-500">
-        <h3 class="text-2xl font-bold mb-4">{{ workout?.id }}</h3>
+        <h3 class="text-2xl font-bold mb-4">{{ workout?.title }}</h3>
         <div class="workout-details">
             <div class="workout-time">
-                <p>{{ workout?.started_at }}</p>
-                <p>{{ workout?.duration }}</p>
+                <p>{{ verboseDateTime(workout?.started_at || '') }}</p>
             </div>
-            <p>{{ workout?.activity_type }}</p>
-            <p>Duration: {{ workout?.duration }}</p>
-            <p>Difficulty: Hard! </p>
+            <p>{{ workout?.activity_type ? workout.activity_type[0]?.toUpperCase() + workout.activity_type.slice(1) : '' }}</p>
+            <div class="workout-stats">
+                <p>Duration: {{ formatDuration(workout?.duration) }}</p>
+                <p>Pace: {{ formatPace(workout?.pace, workout?.activity_type) }}</p>
+                <p>Average Heart Rate: {{ workout?.heart_rate?.toFixed(0) }}</p>
+            </div>
+            <p v-if="workout?.difficulty">Difficulty: {{ workout?.difficulty }}</p>
         </div>
         <!-- TODO, add these later <EquipmentList :equipment="mock_workout.equipment" />
         <ExerciseList :exercises="mock_workout.exercises" /> -->
@@ -86,6 +90,14 @@ onMounted(() => {
 }
 
 .workout-time {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.workout-stats {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;

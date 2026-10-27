@@ -43,6 +43,12 @@ class Workout(SoftDeletableBaseModel):
         
         return 0
 
+    @property
+    def heart_rate(self):
+        if not self.samples.exists():
+            return None
+        return self.samples.aggregate(models.Avg('heart_rate'))['heart_rate__avg']
+
 class WorkoutSample(BaseModel):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name="samples")
     timestamp = models.DateTimeField()

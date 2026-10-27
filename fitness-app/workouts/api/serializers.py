@@ -5,6 +5,7 @@ from users.api.serializers import WorkoutUserSerializer, CommentUserSerializer
 class WorkoutSerializer(serializers.ModelSerializer):
 
     pace = serializers.SerializerMethodField()
+    heart_rate = serializers.SerializerMethodField()
     user = WorkoutUserSerializer(read_only=True)
     like_count = serializers.IntegerField(read_only=True)
     is_liked = serializers.SerializerMethodField()
@@ -19,6 +20,9 @@ class WorkoutSerializer(serializers.ModelSerializer):
 
     def get_is_liked(self, obj):
         return getattr(obj, "is_liked", False)
+
+    def get_heart_rate(self, obj):
+        return obj.heart_rate
 
 class WorkoutSampleSerializer(serializers.ModelSerializer):
     class Meta:

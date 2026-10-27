@@ -18,6 +18,9 @@ interface Workout {
     user: User,
     like_count: number,
     is_liked: boolean,
+    difficulty: string,
+    pace: number | null,
+    heart_rate: number | null,
 }
 
 interface WorkoutForm {

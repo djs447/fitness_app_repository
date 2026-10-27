@@ -2,7 +2,7 @@ from pathlib import Path
 import re
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
-from datetime import timedelta
+from datetime import timedelta, timezone as dt_timezone
 
 from fitparse import FitFile
 
@@ -35,6 +35,8 @@ def parse_fit_file(file_path):
 
         if timestamp is None:
             continue
+
+        timestamp = timestamp.replace(tzinfo=dt_timezone.utc)
 
         latitude = values.get("position_lat")
         longitude = values.get("position_long")
