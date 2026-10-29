@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'workouts',
     'users',
     'common',
+    'django_celery_results',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -155,3 +156,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery Configuration Options
+
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_RESULT_BACKEND = 'django-db'
