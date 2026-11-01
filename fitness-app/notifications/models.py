@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from .constants import INACTIVITY_CADENCE_CHOICES
 
 class NotificationPreference(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notification_preferences")
@@ -11,7 +10,7 @@ class NotificationPreference(models.Model):
     workout_congratulations = models.BooleanField(default=True)
     inactivity_reminders = models.BooleanField(default=True)
 
-    inactivity_cadence = models.CharField(max_length=50, default="weekly", choices=INACTIVITY_CADENCE_CHOICES)
+    reminder_sent_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Notification preferences for {self.user}"

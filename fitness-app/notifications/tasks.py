@@ -1,7 +1,10 @@
 from workouts.models import Workout
-from notifications.models import EmailTemplate
+from notifications.models import EmailTemplate, NotificationPreference
 from celery import shared_task
 from notifications.utils import send_notification_email
+from django.utils import timezone
+from datetime import timedelta
+from fitness_app.settings import DEFAULT_INACTIVITY_CADENCE_IN_DAYS
 
 @shared_task
 def send_workout_congratulations(workout_id, template_name="Workout Congratulations"):
@@ -27,3 +30,45 @@ def send_workout_congratulations(workout_id, template_name="Workout Congratulati
         template=congratulations_template,
         context=context
     )
+
+@shared_task
+def send_inactivity_reminders(template_name="Inactivity Reminders"):
+
+    cutoff_date = timezone.now() - timedelta(days=DEFAULT_INACTIVITY_CADENCE_IN_DAYS)
+
+    inactivity_template = EmailTemplate.objects.get(name=template_name)
+
+    preferences_list = (
+        NotificationPreference.objects.filter(inactivity_reminders=True).select_related("user")
+    )
+
+    for preferences in preferences_list.iterator():
+        user = preferences.user
+
+
+        last_workout = (
+            Workout.objects.filter(user=user).order_by("-started_at").first()
+        )
+
+        if not last_workout:
+            continue
+
+        if last_workout and last_workout.started_at >= cutoff_date:
+            continue
+
+        if preferences.reminder_sent_at and preferences.reminder_sent_at >= cutoff_date:
+            continue
+
+        context = {
+            "username": user.username,
+        }
+
+        email_sent = send_notification_email(
+            user=user,
+            template=inactivity_template,
+            context=context
+        )
+
+        if email_sent:
+            preferences.reminder_sent_at = timezone.now()
+            preferences.save()

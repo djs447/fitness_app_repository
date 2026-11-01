@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -166,6 +167,8 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = 'django-db'
 
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
 # Email platform settings
 
 if DEBUG:
@@ -198,3 +201,6 @@ else:
             }
         }
     }
+
+
+DEFAULT_INACTIVITY_CADENCE_IN_DAYS = 7 
