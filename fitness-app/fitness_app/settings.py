@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'workouts',
     'users',
     'common',
+    'notifications',
+    'django_celery_beat',
     'django_celery_results',
 ]
 
@@ -163,3 +165,36 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = 'django-db'
+
+# Email platform settings
+
+if DEBUG:
+
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "OPTIONS": {
+                "host": "localhost",
+                "port": 1025,
+                "use_tls": False,
+                "use_ssl": False
+            }
+        }
+    }
+
+    DEFAULT_FROM_EMAIL = "your-email@example.com"
+
+else:
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "OPTIONS": {
+                "host": os.environ.get("EMAIL_HOST"),
+                "port": int(os.environ.get("EMAIL_PORT", 587)),
+                "use_tls": True,
+                "use_ssl": False,
+                "username": os.environ.get("EMAIL_HOST_USER"),
+                "password": os.environ.get("EMAIL_HOST_PASSWORD")
+            }
+        }
+    }
