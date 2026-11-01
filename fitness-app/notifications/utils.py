@@ -17,8 +17,8 @@ def send_notification_email(user, template: EmailTemplate, context=None):
     if not template:
         return False
 
-    html_content = Template(template.body).render(Context(context))
-    text_content = strip_tags(html_content)
+    html_content = Template(template.html_body).render(Context(context))
+    text_content = Template(template.text_body).render(Context(context))
 
     email = EmailMultiAlternatives(
         subject=template.subject,

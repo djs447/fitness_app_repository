@@ -19,7 +19,8 @@ class NotificationPreference(models.Model):
 class EmailTemplate(models.Model):
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
-    body = models.TextField()
+    html_body = models.TextField()
+    text_body = models.TextField()
 
     def __str__(self):
         return self.name
