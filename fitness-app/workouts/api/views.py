@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from rest_framework import viewsets, status
 from django.db.models import Count, Exists, OuterRef
 from rest_framework.decorators import action
@@ -10,6 +11,7 @@ from workouts.api.permissions import IsOwnerOrReadOnly
 from users.api.serializers import LikeSerializer
 from users.models import Like
 from workouts.models import Workout, WorkoutSample, Comment
+from notifications.tasks import send_workout_congratulations
 
 
 class WorkoutPagination(PageNumberPagination):
@@ -58,7 +60,9 @@ class WorkoutViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = WorkoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
+        with transaction.atomic():
+            serializer.save(user=request.user)
+            transaction.on_commit(lambda: send_workout_congratulations.delay(serializer.instance.id))
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['get','post'])
