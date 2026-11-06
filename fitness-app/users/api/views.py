@@ -10,6 +10,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from users.models import Profile, Goal
 from common.permissions import IsGoalOwner
+from django.contrib.auth import get_user_model
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
@@ -57,6 +58,14 @@ class CurrentUserView(APIView):
     def get(self, request):
         user = request.user
         serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+class ShareableUsersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        shareable_users = get_user_model().objects.filter(is_active=True).exclude(id=request.user.id)
+        serializer = UserSerializer(shareable_users, many=True)
         return Response(serializer.data)
 
 

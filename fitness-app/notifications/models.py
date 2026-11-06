@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from common.models import SoftDeletableBaseModel
 
 class NotificationPreference(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notification_preferences")
@@ -19,6 +20,25 @@ class EmailTemplate(models.Model):
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
     html_body = models.TextField()
+    text_body = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+class InboxMessage(SoftDeletableBaseModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="inbox_messages")
+    workout_id = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Inbox message for {self.user} about workout {self.workout_id}"
+
+class InboxMessageTemplate(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
     text_body = models.TextField()
 
     def __str__(self):

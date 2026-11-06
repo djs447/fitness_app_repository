@@ -1,10 +1,11 @@
 from workouts.models import Workout
-from notifications.models import EmailTemplate, NotificationPreference
+from notifications.models import EmailTemplate, InboxMessageTemplate, NotificationPreference, InboxMessage
 from celery import shared_task
 from notifications.utils import send_notification_email
 from django.utils import timezone
 from datetime import timedelta
 from fitness_app.settings import DEFAULT_INACTIVITY_CADENCE_IN_DAYS
+from django.contrib.auth import get_user_model
 
 @shared_task
 def send_workout_congratulations(workout_id, template_name="Workout Congratulations"):
@@ -72,3 +73,28 @@ def send_inactivity_reminders(template_name="Inactivity Reminders"):
         if email_sent:
             preferences.reminder_sent_at = timezone.now()
             preferences.save()
+
+@shared_task
+def send_inbox_message_notification(user_id, workout_id, template_name="Inbox Message Notification"):
+
+    user = get_user_model().objects.get(id=user_id)
+    workout = Workout.objects.select_related("user").get(id=workout_id)
+
+    inbox_message_template = InboxMessageTemplate.objects.get(name=template_name)
+
+
+    preferences = getattr(user, "notification_preferences", None)
+    context = {
+        "username": user.username,
+        "workout": workout,
+    }
+
+    if not preferences:
+        return
+
+    InboxMessage.objects.create(
+        user=user,
+        workout_id=workout_id,
+        subject="Sharing a Workout",
+        message=inbox_message_template.text_body.format(**context)
+    )

@@ -46,3 +46,13 @@ export async function register(
 
     return response.data
 }
+
+export async function getShareableUsers(userId: number): Promise<Array<User>> {
+    const response = await api.get<Array<User>>(`/users/${userId}/shareable/`)
+
+    return response.data
+}
+
+export async function shareWorkout(workoutId: string, userIds: number[]): Promise<void> {
+    await api.post(`/workouts/${workoutId}/share/`, { user_ids: userIds })
+}

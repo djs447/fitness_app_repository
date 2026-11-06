@@ -7,6 +7,7 @@ import CommentDialog from '@/components/social/CommentDialog.vue'
 import EditWorkoutDialog from '@/components/workouts/EditWorkoutDialog.vue'
 import WorkoutOptionsMenu from '@/components/workouts/WorkoutOptionsMenu.vue'
 import LikeDialog from '@/components/social/LikeDialog.vue'
+import ShareDialog from '@/components/social/ShareDialog.vue'
 import type { Comment } from '@/types/comment'
 import type { Workout } from '@/types/workout'
 import type { Like } from '@/types/user'
@@ -108,6 +109,7 @@ async function deleteWorkout() {
             <button @click="toggleShareDialog" class="hover:text-blue-300 mb-2">Share</button>
         </div>
     </div>
+    <ShareDialog v-if="showShareDialog" :showShareDialog="showShareDialog" :workoutId="workout.id" @showShareDialog="toggleShareDialog"/>
     <CommentDialog v-if="showCommentDialog" :showCommentDialog="showCommentDialog" :workoutId="workout.id" @showCommentDialog="toggleCommentDialog"/>
     <EditWorkoutDialog v-if="showEditWorkoutDialog" :workout="workout" @close="toggleEditWorkout"/>
     <LikeDialog v-if="showLikeDialog" :showLikeDialog="showLikeDialog" :likes="likes" @showLikeDialog="toggleLikeDialog"/>

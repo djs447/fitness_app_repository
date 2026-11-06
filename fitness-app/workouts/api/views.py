@@ -11,7 +11,7 @@ from workouts.api.permissions import IsOwnerOrReadOnly
 from users.api.serializers import LikeSerializer
 from users.models import Like
 from workouts.models import Workout, WorkoutSample, Comment
-from notifications.tasks import send_workout_congratulations
+from notifications.tasks import send_inbox_message_notification, send_workout_congratulations
 
 
 class WorkoutPagination(PageNumberPagination):
@@ -131,6 +131,17 @@ class WorkoutViewSet(viewsets.ModelViewSet):
         points = workout.samples.all()
         serializer = WorkoutSampleSerializer(points, many=True)
         return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['post'],
+        url_path='share',
+        url_name='share',
+    )
+    def share(self, request, pk=None):
+        user_ids = request.data.get('user_ids', [])
+        [send_inbox_message_notification.delay(user_id=user_id, workout_id=self.get_object().id) for user_id in user_ids]
+        return Response({'message': 'Inbox message shared successfully'})
 
 
 class WorkoutSampleViewSet(viewsets.ModelViewSet):

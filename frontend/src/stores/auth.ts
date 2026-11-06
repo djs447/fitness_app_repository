@@ -13,6 +13,8 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.getItem('authToken'),
   )
 
+  const shareableUsers = ref<Array<User>>([])
+
   const isAuthenticated = computed(() => {
     return user.value !== null && token.value !== null
   })
@@ -83,6 +85,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function getShareableUsers(userId: number) {
+    const response = await authService.getShareableUsers(userId)
+    shareableUsers.value = response
+    return response
+  }
+
+  async function shareWorkout(workoutId: string, userIds: number[]) {
+    const response = await authService.shareWorkout(workoutId, userIds)
+    return response
+  }
+
   return {
     user,
     token,
@@ -91,5 +104,8 @@ export const useAuthStore = defineStore('auth', () => {
     initialize,
     logout,
     register,
+    getShareableUsers,
+    shareableUsers,
+    shareWorkout,
   }
 });
