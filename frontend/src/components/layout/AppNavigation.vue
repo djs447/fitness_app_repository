@@ -22,6 +22,7 @@ async function logout() {
           <RouterLink class="router-link" to="/about">About</RouterLink>
           <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
           <RouterLink class="router-link" to="/profile">Profile</RouterLink>
+          <RouterLink class="router-link" to="/inbox">Inbox</RouterLink>
         </div>
       </nav>
   </div>

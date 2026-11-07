@@ -9,7 +9,9 @@ class NotificationPreferenceAdmin(admin.ModelAdmin):
     list_display = ("user", "email_enabled", "sms_enabled", "inactivity_reminders")
 
 class InboxMessageAdmin(admin.ModelAdmin):
-    list_display = ("user", "subject")
+    list_display = ("user", "subject", "created", "modified")
+
+    ordering = ("-created",)
 
 class InboxMessageTemplateAdmin(admin.ModelAdmin):
     list_display = ("name", "description")

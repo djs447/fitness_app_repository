@@ -75,17 +75,19 @@ def send_inactivity_reminders(template_name="Inactivity Reminders"):
             preferences.save()
 
 @shared_task
-def send_inbox_message_notification(user_id, workout_id, template_name="Inbox Message Notification"):
+def send_inbox_message_notification(user_id, workout_id, sent_by, template_name="Inbox Message Notification"):
 
-    user = get_user_model().objects.get(id=user_id)
+    user = get_user_model().objects.select_related("profile").get(id=user_id)
     workout = Workout.objects.select_related("user").get(id=workout_id)
 
     inbox_message_template = InboxMessageTemplate.objects.get(name=template_name)
 
+    display_name = user.profile.display_name
+
 
     preferences = getattr(user, "notification_preferences", None)
     context = {
-        "username": user.username,
+        "display_name": display_name,
         "workout": workout,
     }
 
@@ -96,5 +98,6 @@ def send_inbox_message_notification(user_id, workout_id, template_name="Inbox Me
         user=user,
         workout_id=workout_id,
         subject="Sharing a Workout",
-        message=inbox_message_template.text_body.format(**context)
+        message=inbox_message_template.text_body.format(**context),
+        sent_by=sent_by
     )

@@ -57,7 +57,6 @@ onMounted(() => {
 
         <div class="share-dialog relative z-10 w-full max-w-lg rounded-lg bg-white p-6">
             <h3>Share Workout</h3>
-            <p>Workout ID: {{ workoutId }}</p>
             <form @submit.prevent="shareWithUsers" class="mt-4 gap-2">
                 <div class="flex flex-col gap-2">
                 <template v-for="user in authStore.shareableUsers" :key="user.id">

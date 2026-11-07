@@ -32,6 +32,7 @@ class InboxMessage(SoftDeletableBaseModel):
     message = models.TextField()
     read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    sent_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="sent_inbox_messages")
 
     def __str__(self):
         return f"Inbox message for {self.user} about workout {self.workout_id}"

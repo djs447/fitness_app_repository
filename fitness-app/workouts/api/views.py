@@ -139,8 +139,9 @@ class WorkoutViewSet(viewsets.ModelViewSet):
         url_name='share',
     )
     def share(self, request, pk=None):
+        sent_by = request.user
         user_ids = request.data.get('user_ids', [])
-        [send_inbox_message_notification.delay(user_id=user_id, workout_id=self.get_object().id) for user_id in user_ids]
+        [send_inbox_message_notification.delay(user_id=user_id, workout_id=self.get_object().id, sent_by=sent_by) for user_id in user_ids]
         return Response({'message': 'Inbox message shared successfully'})
 
 
