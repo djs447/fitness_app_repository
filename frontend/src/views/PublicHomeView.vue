@@ -1,8 +1,4 @@
-<script setup lang="ts">
-
-import { ref } from 'vue';
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="home-container">
@@ -12,9 +8,7 @@ import { ref } from 'vue';
 </template>
 
 <style scoped>
-
-.home-container{
+.home-container {
   color: white;
 }
-
 </style>

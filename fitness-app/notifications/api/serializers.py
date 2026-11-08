@@ -1,8 +1,7 @@
-
-from django.contrib.gis import serializers
-from rest_framework import serializers
 from notifications.models import InboxMessage
+from rest_framework import serializers
 from users.api.serializers import UserSerializer
+
 
 class InboxMessageSerializer(serializers.ModelSerializer):
 
@@ -10,4 +9,4 @@ class InboxMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InboxMessage
-        fields = '__all__'
+        fields = "__all__"

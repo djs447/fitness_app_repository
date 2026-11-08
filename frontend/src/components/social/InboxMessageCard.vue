@@ -1,39 +1,45 @@
 <script setup lang="ts">
-import type { InboxMessage } from '@/types/notification'
-import { verboseDateTime } from '@/services/format.ts'
-import { useNotificationStore } from '@/stores/notification'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import type { InboxMessage } from "@/types/notification";
+import { verboseDateTime } from "@/services/format.ts";
+import { useNotificationStore } from "@/stores/notification";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 const props = defineProps<{
-  message: InboxMessage
-}>()
+  message: InboxMessage;
+}>();
 
 const emit = defineEmits<{
-  (e: 'delete', messageId: string): void
-}>()
+  (e: "delete", messageId: string): void;
+}>();
 
-const notificationStore = useNotificationStore()
+const notificationStore = useNotificationStore();
 const markAsRead = () => {
-  notificationStore.markAsRead(props.message.id)
-  props.message.read = true
-}
-
+  notificationStore.markAsRead(props.message.id);
+  props.message.read = true;
+};
 </script>
 
 <template>
   <div class="inbox-message-card">
     <div class="message-header flex justify-between items-center">
       <span class="message-sender">{{ props.message.sent_by.username }}</span>
-      <span class="message-date">{{ verboseDateTime(props.message.created) }}</span>
+      <span class="message-date">{{
+        verboseDateTime(props.message.created)
+      }}</span>
     </div>
     <p class="message-body">{{ props.message.message }}</p>
     <div class="message-actions flex justify-between">
-      <button v-if="!props.message.read" @click="markAsRead" class="mark-as-read">Mark as Read</button>
+      <button
+        v-if="!props.message.read"
+        @click="markAsRead"
+        class="mark-as-read"
+      >
+        Mark as Read
+      </button>
       <span v-else class="read-message">Read</span>
       <button @click="emit('delete', props.message.id)" class="delete-message">
         <FontAwesomeIcon :icon="faTrash" />
       </button>
-
     </div>
   </div>
 </template>

@@ -1,11 +1,18 @@
-from workouts.models import Workout
-from notifications.models import EmailTemplate, InboxMessageTemplate, NotificationPreference, InboxMessage
-from celery import shared_task
-from notifications.utils import send_notification_email
-from django.utils import timezone
 from datetime import timedelta
-from fitness_app.settings import DEFAULT_INACTIVITY_CADENCE_IN_DAYS
+
+from celery import shared_task
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+from fitness_app.settings import DEFAULT_INACTIVITY_CADENCE_IN_DAYS
+from notifications.models import (
+    EmailTemplate,
+    InboxMessage,
+    InboxMessageTemplate,
+    NotificationPreference,
+)
+from notifications.utils import send_notification_email
+from workouts.models import Workout
+
 
 @shared_task
 def send_workout_congratulations(workout_id, template_name="Workout Congratulations"):
@@ -27,10 +34,9 @@ def send_workout_congratulations(workout_id, template_name="Workout Congratulati
         return
 
     send_notification_email(
-        user=user,
-        template=congratulations_template,
-        context=context
+        user=user, template=congratulations_template, context=context
     )
+
 
 @shared_task
 def send_inactivity_reminders(template_name="Inactivity Reminders"):
@@ -39,17 +45,14 @@ def send_inactivity_reminders(template_name="Inactivity Reminders"):
 
     inactivity_template = EmailTemplate.objects.get(name=template_name)
 
-    preferences_list = (
-        NotificationPreference.objects.filter(inactivity_reminders=True).select_related("user")
-    )
+    preferences_list = NotificationPreference.objects.filter(
+        inactivity_reminders=True
+    ).select_related("user")
 
     for preferences in preferences_list.iterator():
         user = preferences.user
 
-
-        last_workout = (
-            Workout.objects.filter(user=user).order_by("-started_at").first()
-        )
+        last_workout = Workout.objects.filter(user=user).order_by("-started_at").first()
 
         if not last_workout:
             continue
@@ -65,17 +68,18 @@ def send_inactivity_reminders(template_name="Inactivity Reminders"):
         }
 
         email_sent = send_notification_email(
-            user=user,
-            template=inactivity_template,
-            context=context
+            user=user, template=inactivity_template, context=context
         )
 
         if email_sent:
             preferences.reminder_sent_at = timezone.now()
             preferences.save()
 
+
 @shared_task
-def send_inbox_message_notification(user_id, workout_id, sent_by, template_name="Inbox Message Notification"):
+def send_inbox_message_notification(
+    user_id, workout_id, sent_by, template_name="Inbox Message Notification"
+):
 
     user = get_user_model().objects.select_related("profile").get(id=user_id)
     workout = Workout.objects.select_related("user").get(id=workout_id)
@@ -83,7 +87,6 @@ def send_inbox_message_notification(user_id, workout_id, sent_by, template_name=
     inbox_message_template = InboxMessageTemplate.objects.get(name=template_name)
 
     display_name = user.profile.display_name
-
 
     preferences = getattr(user, "notification_preferences", None)
     context = {
@@ -99,5 +102,5 @@ def send_inbox_message_notification(user_id, workout_id, sent_by, template_name=
         workout_id=workout_id,
         subject="Sharing a Workout",
         message=inbox_message_template.text_body.format(**context),
-        sent_by=sent_by
+        sent_by=sent_by,
     )

@@ -1,14 +1,12 @@
 <script setup lang="ts">
-
 const props = defineProps<{
-    exercises: Array<{
-        name: string
-        duration: number
-        averageHeartRate: number
-        instructions: string
-    }>
-}>()
-
+  exercises: Array<{
+    name: string;
+    duration: number;
+    averageHeartRate: number;
+    instructions: string;
+  }>;
+}>();
 </script>
 
 <template>

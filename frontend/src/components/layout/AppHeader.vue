@@ -1,37 +1,38 @@
 <script setup lang="ts">
+import AppNavigation from "@/components/layout/AppNavigation.vue";
 
-import AppNavigation from '@/components/layout/AppNavigation.vue'
+import { useAuthStore } from "@/stores/auth";
+import { RouterLink, useRouter } from "vue-router";
 
-import { useAuthStore } from '@/stores/auth';
-import { RouterLink, useRouter } from 'vue-router'
-
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
+const authStore = useAuthStore();
 
 async function logout() {
-    await authStore.logout()
+  await authStore.logout();
 
-    await router.push('/')
+  await router.push("/");
 }
-
 </script>
 
 <template>
-    <header class="app-header">
-        <div class="logo-container pl-5">
-          <img alt="App logo" class="logo" src="@/assets/logo.png" width="80" height="80" />
-        </div>
-        <AppNavigation class="navigation-bar"/>
-        <div class="logout-container">
-          <button class="router-link" @click="logout">
-            Logout
-          </button>
-        </div>
-    </header>
+  <header class="app-header">
+    <div class="logo-container pl-5">
+      <img
+        alt="App logo"
+        class="logo"
+        src="@/assets/logo.png"
+        width="80"
+        height="80"
+      />
+    </div>
+    <AppNavigation class="navigation-bar" />
+    <div class="logout-container">
+      <button class="router-link" @click="logout">Logout</button>
+    </div>
+  </header>
 </template>
 
 <style scoped>
-
 .app-header {
   background-color: var(--header-container-background-color);
   border-bottom: 1px solid var(--header-container-border-color);
@@ -42,7 +43,7 @@ async function logout() {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  
+
   position: sticky;
   top: 0;
   z-index: 5;
@@ -57,11 +58,11 @@ async function logout() {
   transition: all 0.4s ease;
 }
 
-.navigation-bar{
+.navigation-bar {
   justify-content: center;
 }
 
-.logout-container{
+.logout-container {
   justify-self: end;
   padding-right: 20px;
 }
@@ -82,5 +83,4 @@ async function logout() {
   color: black;
   transition: all 0.4s ease;
 }
-
 </style>

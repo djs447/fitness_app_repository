@@ -1,99 +1,83 @@
-import { computed, ref } from 'vue';
-import { defineStore } from 'pinia';
+import { computed, ref } from "vue";
+import { defineStore } from "pinia";
 
-import * as authService from '@/services/authService'
+import * as authService from "@/services/authService";
 
-import type { User } from '@/types/user'
+import type { User } from "@/types/user";
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", () => {
+  const user = ref<User | null>(null);
 
-  const user = ref<User | null>(null)
+  const token = ref<string | null>(localStorage.getItem("authToken"));
 
-  const token = ref<string | null>(
-    localStorage.getItem('authToken'),
-  )
-
-  const shareableUsers = ref<Array<User>>([])
+  const shareableUsers = ref<Array<User>>([]);
 
   const isAuthenticated = computed(() => {
-    return user.value !== null && token.value !== null
-  })
+    return user.value !== null && token.value !== null;
+  });
 
-  async function register(
-    username: string,
-    email: string,
-    password: string,
-  ) {
+  async function register(username: string, email: string, password: string) {
     const response = await authService.register({
       username,
       email,
       password,
-    })
+    });
 
-    token.value = response.token
+    token.value = response.token;
 
-    localStorage.setItem(
-      'authToken',
-      response.token
-    )
+    localStorage.setItem("authToken", response.token);
 
-    user.value = response.user
+    user.value = response.user;
   }
 
-  async function login(
-    username: string,
-    password: string,
-  ) {
+  async function login(username: string, password: string) {
     const response = await authService.login({
       username,
       password,
-    })
+    });
 
-    token.value = response.token
+    token.value = response.token;
 
-    localStorage.setItem(
-      'authToken',
-      response.token
-    )
+    localStorage.setItem("authToken", response.token);
 
-    user.value = await authService.getCurrentUser()
+    user.value = await authService.getCurrentUser();
   }
 
   async function initialize() {
     if (!token.value) {
-      return
+      return;
     }
 
     try {
-      user.value = await authService.getCurrentUser()
-    } catch{
-      token.value = null
-      user.value = null
+      user.value = await authService.getCurrentUser();
+    } catch {
+      token.value = null;
+      user.value = null;
 
-      localStorage.removeItem('authToken')
+      localStorage.removeItem("authToken");
     }
   }
 
   async function logout() {
     try {
-      await authService.logout()
+      await authService.logout();
     } finally {
-      token.value = null
-      user.value = null
+      token.value = null;
+      user.value = null;
 
-      localStorage.removeItem('authToken')
+      localStorage.removeItem("authToken");
     }
   }
 
   async function getShareableUsers(userId: number) {
-    const response = await authService.getShareableUsers(userId)
-    shareableUsers.value = response
-    return response
+    const response = await authService.getShareableUsers(userId);
+    shareableUsers.value = response;
+    return response;
   }
 
   async function shareWorkout(workoutId: string, userIds: number[]) {
-    const response = await authService.shareWorkout(workoutId, userIds)
-    return response
+    const response = await authService.shareWorkout(workoutId, userIds);
+    return response;
   }
 
   return {
@@ -107,5 +91,5 @@ export const useAuthStore = defineStore('auth', () => {
     getShareableUsers,
     shareableUsers,
     shareWorkout,
-  }
+  };
 });

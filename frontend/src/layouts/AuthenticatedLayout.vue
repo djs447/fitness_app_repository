@@ -1,21 +1,17 @@
 <script setup lang="ts">
-
-import AppHeader from '@/components/layout/AppHeader.vue'
-
+import AppHeader from "@/components/layout/AppHeader.vue";
 </script>
 
 <template>
-    <AppHeader />
-    <main>
-        <RouterView />
-    </main>
+  <AppHeader />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
-
-main{
-    width: auto;
-    justify-content: flex-start;
+main {
+  width: auto;
+  justify-content: flex-start;
 }
-
 </style>

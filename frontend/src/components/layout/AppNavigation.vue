@@ -1,35 +1,32 @@
 <script setup lang="ts">
+import { useAuthStore } from "@/stores/auth";
+import { RouterLink, useRouter } from "vue-router";
 
-import { useAuthStore } from '@/stores/auth';
-import { RouterLink, useRouter } from 'vue-router'
-
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
+const authStore = useAuthStore();
 
 async function logout() {
-    await authStore.logout()
+  await authStore.logout();
 
-    await router.push('/')
+  await router.push("/");
 }
-
 </script>
 
 <template>
   <div class="flex py-5">
-      <nav class="flex p-5 items-center nav-container">
-        <div class="nav-button-container">
-          <RouterLink class="router-link" to="/home">Home</RouterLink>
-          <RouterLink class="router-link" to="/about">About</RouterLink>
-          <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
-          <RouterLink class="router-link" to="/profile">Profile</RouterLink>
-          <RouterLink class="router-link" to="/inbox">Inbox</RouterLink>
-        </div>
-      </nav>
+    <nav class="flex p-5 items-center nav-container">
+      <div class="nav-button-container">
+        <RouterLink class="router-link" to="/home">Home</RouterLink>
+        <RouterLink class="router-link" to="/about">About</RouterLink>
+        <RouterLink class="router-link" to="/workouts">Workouts</RouterLink>
+        <RouterLink class="router-link" to="/profile">Profile</RouterLink>
+        <RouterLink class="router-link" to="/inbox">Inbox</RouterLink>
+      </div>
+    </nav>
   </div>
 </template>
 
 <style scoped>
-
 .router-link {
   margin: 0 10px;
   padding: 0.5rem 1rem;
@@ -40,7 +37,7 @@ async function logout() {
   gap: 1rem;
 }
 
-.nav-container{
+.nav-container {
   display: flex;
   justify-content: center;
   margin-left: 0px;
@@ -61,5 +58,4 @@ nav a.router-link:hover {
   background-color: transparent;
   color: black;
 }
-
 </style>

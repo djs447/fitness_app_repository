@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import { RouterView } from "vue-router";
 </script>
 
 <template>
@@ -8,7 +7,6 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 </template>
 
 <style scoped>
-
 @media (min-width: 1024px) {
   header {
     display: flex;

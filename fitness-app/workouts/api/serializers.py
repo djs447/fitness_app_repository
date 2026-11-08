@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from users.api.serializers import CommentUserSerializer, WorkoutUserSerializer
 from workouts.models import Comment, Workout, WorkoutSample
-from users.api.serializers import WorkoutUserSerializer, CommentUserSerializer
+
 
 class WorkoutSerializer(serializers.ModelSerializer):
 
@@ -12,8 +13,8 @@ class WorkoutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workout
-        fields = '__all__'
-        read_only_fields = ['user']
+        fields = "__all__"
+        read_only_fields = ["user"]
 
     def get_pace(self, obj):
         return obj.average_pace
@@ -24,10 +25,12 @@ class WorkoutSerializer(serializers.ModelSerializer):
     def get_heart_rate(self, obj):
         return obj.heart_rate
 
+
 class WorkoutSampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkoutSample
-        fields = '__all__'
+        fields = "__all__"
+
 
 class CommentSerializer(serializers.ModelSerializer):
 
@@ -35,5 +38,5 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = '__all__'
-        read_only_fields = ['user']
+        fields = "__all__"
+        read_only_fields = ["user"]

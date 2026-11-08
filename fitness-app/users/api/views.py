@@ -1,21 +1,29 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from users.api.serializers import ProfileSerializer, UserSerializer, RegisterSerializer, GoalSerializer
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.views import APIView
-from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from users.models import Profile, Goal
 from common.permissions import IsGoalOwner
 from django.contrib.auth import get_user_model
+from rest_framework import status, viewsets
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.status import (
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+)
+from rest_framework.views import APIView
+from users.api.serializers import (
+    GoalSerializer,
+    ProfileSerializer,
+    RegisterSerializer,
+    UserSerializer,
+)
+from users.models import Goal, Profile
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = []
+
 
 class GoalViewSet(viewsets.ModelViewSet):
     queryset = Goal.objects.all()
@@ -39,6 +47,7 @@ class GoalViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class CurrentProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -47,10 +56,13 @@ class CurrentProfileView(APIView):
         return Response(serializer.data)
 
     def patch(self, request):
-        serializer = ProfileSerializer(request.user.profile, data=request.data, partial=True)
+        serializer = ProfileSerializer(
+            request.user.profile, data=request.data, partial=True
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
 
 class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
@@ -60,11 +72,14 @@ class CurrentUserView(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+
 class ShareableUsersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
-        shareable_users = get_user_model().objects.filter(is_active=True).exclude(id=request.user.id)
+        shareable_users = (
+            get_user_model().objects.filter(is_active=True).exclude(id=request.user.id)
+        )
         serializer = UserSerializer(shareable_users, many=True)
         return Response(serializer.data)
 
@@ -96,6 +111,7 @@ class RegisterView(APIView):
                 status=HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]

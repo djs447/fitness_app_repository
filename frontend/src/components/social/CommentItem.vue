@@ -1,26 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
-import type { Comment } from '@/types/comment'
+import { useAuthStore } from "@/stores/auth";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import type { Comment } from "@/types/comment";
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
 const userCanUpdateComment = () => {
-    return authStore.user?.id === props.comment.user.id
-}
+  return authStore.user?.id === props.comment.user.id;
+};
 
 const props = defineProps<{
-  comment: Comment
-}>()
+  comment: Comment;
+}>();
 
 const emits = defineEmits<{
-    edit: [commentId: string],
-    delete: [commentId: string],
-    close: []
-}>()
-
+  edit: [commentId: string];
+  delete: [commentId: string];
+  close: [];
+}>();
 </script>
 
 <template>
@@ -33,10 +31,20 @@ const emits = defineEmits<{
         {{ props.comment.created }}
       </p>
       <p class="text-gray-500 text-sm">
-        <FontAwesomeIcon class="hover:text-blue-300" v-if="userCanUpdateComment()" :icon="faPen" @click="emits('edit', props.comment.id)" />
+        <FontAwesomeIcon
+          class="hover:text-blue-300"
+          v-if="userCanUpdateComment()"
+          :icon="faPen"
+          @click="emits('edit', props.comment.id)"
+        />
       </p>
-      <p class="text-gray-500 text-sm ">
-        <FontAwesomeIcon class="hover:text-blue-300"v-if="userCanUpdateComment()" :icon="faTrash" @click="emits('delete', props.comment.id)" />
+      <p class="text-gray-500 text-sm">
+        <FontAwesomeIcon
+          class="hover:text-blue-300"
+          v-if="userCanUpdateComment()"
+          :icon="faTrash"
+          @click="emits('delete', props.comment.id)"
+        />
       </p>
     </div>
 

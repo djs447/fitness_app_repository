@@ -1,58 +1,64 @@
-import api from '@/services/api'
-import type { User } from '@/types/user'
+import api from "@/services/api";
+import type { User } from "@/types/user";
 
 interface LoginCredentials {
-    username: string
-    password: string
+  username: string;
+  password: string;
 }
 
 interface LoginResponse {
-    token: string
+  token: string;
 }
 
 interface RegisterData {
-    username: string
-    email: string
-    password: string
+  username: string;
+  email: string;
+  password: string;
 }
 
 interface RegisterResponse {
-    token: string
-    user: User
+  token: string;
+  user: User;
 }
 
 export async function login(
-    credentials: LoginCredentials,
+  credentials: LoginCredentials,
 ): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>('/auth/login/', credentials,)
+  const response = await api.post<LoginResponse>("/auth/login/", credentials);
 
-    return response.data
+  return response.data;
 }
 
 export async function getCurrentUser(): Promise<User> {
-    const response = await api.get<User>('/users/me/')
+  const response = await api.get<User>("/users/me/");
 
-    return response.data
+  return response.data;
 }
 
 export async function logout(): Promise<void> {
-    await api.post('/users/logout/')
+  await api.post("/users/logout/");
 }
 
 export async function register(
-    credentials: RegisterData 
+  credentials: RegisterData,
 ): Promise<RegisterResponse> {
-    const response = await api.post<RegisterResponse>('/auth/register/', credentials,)
+  const response = await api.post<RegisterResponse>(
+    "/auth/register/",
+    credentials,
+  );
 
-    return response.data
+  return response.data;
 }
 
 export async function getShareableUsers(userId: number): Promise<Array<User>> {
-    const response = await api.get<Array<User>>(`/users/${userId}/shareable/`)
+  const response = await api.get<Array<User>>(`/users/${userId}/shareable/`);
 
-    return response.data
+  return response.data;
 }
 
-export async function shareWorkout(workoutId: string, userIds: number[]): Promise<void> {
-    await api.post(`/workouts/${workoutId}/share/`, { user_ids: userIds })
+export async function shareWorkout(
+  workoutId: string,
+  userIds: number[],
+): Promise<void> {
+  await api.post(`/workouts/${workoutId}/share/`, { user_ids: userIds });
 }

@@ -1,36 +1,33 @@
-
-
 <script setup lang="ts">
-
-import type { Workout } from '@/types/workout'
-import WorkoutCard from '@/components/workouts/WorkoutCard.vue'
-import { ref } from 'vue'
+import type { Workout } from "@/types/workout";
+import WorkoutCard from "@/components/workouts/WorkoutCard.vue";
 
 defineProps<{
-    workouts: Array<Workout>
-}>()
-
+  workouts: Array<Workout>;
+}>();
 </script>
 
 <template>
-    <div class="workout-list">
-        <div class="workout-card">
-            <WorkoutCard v-for="workout in workouts" :key="workout.id" :workout="workout" />
-        </div>
+  <div class="workout-list">
+    <div class="workout-card">
+      <WorkoutCard
+        v-for="workout in workouts"
+        :key="workout.id"
+        :workout="workout"
+      />
     </div>
+  </div>
 </template>
 
 <style>
 .workout-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .workout-card {
-    margin: 2rem;
+  margin: 2rem;
 }
-
-
 </style>

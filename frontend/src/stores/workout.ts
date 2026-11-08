@@ -1,154 +1,147 @@
-import { computed, ref } from 'vue';
-import { defineStore } from 'pinia';
+import { ref } from "vue";
+import { defineStore } from "pinia";
 
-import * as workoutService from '@/services/workoutService'
+import * as workoutService from "@/services/workoutService";
 
-import type { Workout, WorkoutForm, PaginatedWorkouts } from '@/types/workout'
-import type { Like } from '@/types/user';
+import type { Workout, WorkoutForm } from "@/types/workout";
+import type { Like } from "@/types/user";
 
-export const useWorkoutStore = defineStore('workout', () => {
+export const useWorkoutStore = defineStore("workout", () => {
+  const workout = ref<Workout | null>(null);
+  const workouts = ref<Array<Workout>>([]);
+  const my_workouts = ref<Workout[]>([]);
+  const likes = ref<Array<Like>>([]);
+  const nextPage = ref<string | null>(null);
+  const isLoading = ref(false);
+  const hasMore = ref(true);
 
-    const workout = ref<Workout | null>(null)
-    const workouts = ref<Array<Workout>>([])
-    const my_workouts = ref<Workout[]>([])
-    const likes = ref<Array<Like>>([])
-    const nextPage = ref<string | null>(null)
-    const isLoading = ref(false)
-    const hasMore = ref(true)
+  async function fetch() {
+    try {
+      isLoading.value = true;
+      const response = await workoutService.fetchWorkouts();
+      workouts.value = response.results;
+      nextPage.value = response.next;
+      hasMore.value = response.next !== null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
-    async function fetch(){
+  async function get(workoutID: string | string[] | undefined) {
+    const response = await workoutService.getWorkout(workoutID);
 
-        try{
-            isLoading.value = true
-            const response = await workoutService.fetchWorkouts()
-            workouts.value = response.results
-            nextPage.value = response.next
-            hasMore.value = response.next !== null
-        } finally {
-            isLoading.value = false
-        }
+    workout.value = response;
+    console.log(response);
+  }
 
+  async function update(workoutID: string, data: Partial<Workout>) {
+    const response = await workoutService.updateWorkout(workoutID, data);
+
+    const index = my_workouts.value.findIndex((w) => w.id === workoutID);
+
+    if (index !== -1) {
+      my_workouts.value[index] = response;
     }
 
-    async function get(workoutID: string | string[] | undefined) {
-        const response = await workoutService.getWorkout(workoutID)
+    workout.value = response;
+  }
 
-        workout.value = response
-        console.log(response)
+  async function create(workout: WorkoutForm) {
+    const response = await workoutService.createWorkout(workout);
+    my_workouts.value.push(response);
+    return response;
+  }
+
+  async function fetchMyWorkouts() {
+    try {
+      isLoading.value = true;
+      const response = await workoutService.fetchMyWorkouts();
+      my_workouts.value = response.results;
+      nextPage.value = response.next;
+      hasMore.value = response.next !== null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function fetchMyNextPage() {
+    if (!nextPage.value || isLoading.value) {
+      return;
     }
 
-    async function update(workoutID:string, data: Partial<Workout>) {
-        const response = await workoutService.updateWorkout(workoutID, data)
+    try {
+      const response = await workoutService.fetchMyWorkouts(nextPage.value);
 
-        const index = my_workouts.value.findIndex((w) => w.id === workoutID)
+      my_workouts.value.push(...response.results);
 
-        if (index !== -1) {
-            my_workouts.value[index] = response
-        }
+      nextPage.value = response.next;
+      hasMore.value = response.next !== null;
+    } finally {
+      //isLoading.value = false
+    }
+  }
 
-        workout.value = response
+  async function fetchNextPage() {
+    if (!nextPage.value || isLoading.value) {
+      return;
     }
 
-    async function create(workout: WorkoutForm) {
-        const response = await workoutService.createWorkout(workout)
-        my_workouts.value.push(response)
-        return response
+    try {
+      const response = await workoutService.fetchWorkouts(nextPage.value);
+
+      workouts.value.push(...response.results);
+
+      nextPage.value = response.next;
+      hasMore.value = response.next !== null;
+    } finally {
+      //isLoading.value = false
     }
+  }
 
-    async function fetchMyWorkouts(){
+  async function deleteWorkout(workoutID: string) {
+    await workoutService.deleteWorkout(workoutID);
+    my_workouts.value = workouts.value.filter((w) => w.id !== workoutID);
+  }
 
-        try{
-            isLoading.value = true
-            const response = await workoutService.fetchMyWorkouts()
-            my_workouts.value = response.results
-            nextPage.value = response.next
-            hasMore.value = response.next !== null
-        } finally {
-            isLoading.value = false
-        }
+  async function likeWorkout(workoutID: string) {
+    const response = await workoutService.likeWorkout(workoutID);
+    const workout = my_workouts.value.find((w) => w.id === workoutID);
+    if (workout) {
+      workout.is_liked = response.liked;
     }
+  }
 
-    async function fetchMyNextPage() {
-        if (!nextPage.value || isLoading.value) {
-            return
-        }
-
-        try {
-            const response = await workoutService.fetchMyWorkouts(nextPage.value)
-
-            my_workouts.value.push(...response.results)
-
-            nextPage.value = response.next
-            hasMore.value = response.next !== null
-
-        } finally{
-            //isLoading.value = false
-        }
+  async function unlikeWorkout(workoutID: string) {
+    const response = await workoutService.unlikeWorkout(workoutID);
+    const workout = my_workouts.value.find((w) => w.id === workoutID);
+    if (workout) {
+      workout.is_liked = response.liked;
     }
+  }
 
-    async function fetchNextPage() {
-        if (!nextPage.value || isLoading.value) {
-            return
-        }
+  async function fetchLikes(workoutID: string) {
+    const response = await workoutService.fetchLikes(workoutID);
+    likes.value = response;
+    console.log("Fetched likes for workout:", workoutID, likes.value);
+  }
 
-        try {
-            const response = await workoutService.fetchWorkouts(nextPage.value)
-
-            workouts.value.push(...response.results)
-
-            nextPage.value = response.next
-            hasMore.value = response.next !== null
-
-        } finally{
-            //isLoading.value = false
-        }
-    }
-
-
-    async function deleteWorkout(workoutID: string) {
-        await workoutService.deleteWorkout(workoutID)
-        my_workouts.value = workouts.value.filter((w) => w.id !== workoutID)
-    }
-
-    async function likeWorkout(workoutID: string) {
-        const response = await workoutService.likeWorkout(workoutID)
-        const workout = my_workouts.value.find((w) => w.id === workoutID)
-        if (workout) {
-            workout.is_liked = response.liked
-        }
-    }
-
-    async function unlikeWorkout(workoutID: string) {
-        const response = await workoutService.unlikeWorkout(workoutID)
-        const workout = my_workouts.value.find((w) => w.id === workoutID)
-        if (workout) {
-            workout.is_liked = response.liked
-        }
-    }
-
-    async function fetchLikes(workoutID: string) {
-        const response = await workoutService.fetchLikes(workoutID)
-        likes.value = response
-        console.log("Fetched likes for workout:", workoutID, likes.value)
-    }
-
-    return{
-        workout,
-        likes,
-        workouts,
-        my_workouts,
-        isLoading,
-        hasMore,
-        fetch,
-        get,
-        update,
-        fetchMyWorkouts,
-        create,
-        deleteWorkout,
-        likeWorkout,
-        unlikeWorkout,
-        fetchNextPage,
-        fetchMyNextPage,
-        fetchLikes,
-    }
+  return {
+    workout,
+    likes,
+    workouts,
+    my_workouts,
+    isLoading,
+    hasMore,
+    fetch,
+    get,
+    update,
+    fetchMyWorkouts,
+    create,
+    deleteWorkout,
+    likeWorkout,
+    unlikeWorkout,
+    fetchNextPage,
+    fetchMyNextPage,
+    fetchLikes,
+  };
 });

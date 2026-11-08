@@ -1,59 +1,89 @@
-import api from '@/services/api'
-import type { PaginatedWorkouts, Workout, WorkoutForm, LikeResponse, WorkoutSample } from '@/types/workout'
-import type { Like } from '@/types/user'
+import api from "@/services/api";
+import type {
+  PaginatedWorkouts,
+  Workout,
+  WorkoutForm,
+  LikeResponse,
+  WorkoutSample,
+} from "@/types/workout";
+import type { Like } from "@/types/user";
 
-export async function fetchWorkouts(url: string = '/workouts/'): Promise<PaginatedWorkouts> {
-    const response = await api.get<PaginatedWorkouts>(url)
-    return response.data
+export async function fetchWorkouts(
+  url: string = "/workouts/",
+): Promise<PaginatedWorkouts> {
+  const response = await api.get<PaginatedWorkouts>(url);
+  return response.data;
 }
 
-export async function getWorkout(workoutID: string | string[] | undefined): Promise<Workout> {
-    const response = await api.get<Workout>('/workouts/' + workoutID)
+export async function getWorkout(
+  workoutID: string | string[] | undefined,
+): Promise<Workout> {
+  const response = await api.get<Workout>("/workouts/" + workoutID);
 
-    return response.data
+  return response.data;
 }
 
-export async function updateWorkout(workoutID: string, data: Partial<Workout>): Promise<Workout> {
-    const response = await api.patch<Workout>('/workouts/' + workoutID + '/', data,)
+export async function updateWorkout(
+  workoutID: string,
+  data: Partial<Workout>,
+): Promise<Workout> {
+  const response = await api.patch<Workout>(
+    "/workouts/" + workoutID + "/",
+    data,
+  );
 
-    return response.data
+  return response.data;
 }
 
-export async function fetchMyWorkouts(url: string = '/workouts/me/'): Promise<PaginatedWorkouts> {
-    const response = await api.get<PaginatedWorkouts>(url)
-    return response.data
+export async function fetchMyWorkouts(
+  url: string = "/workouts/me/",
+): Promise<PaginatedWorkouts> {
+  const response = await api.get<PaginatedWorkouts>(url);
+  return response.data;
 }
 
 export async function createWorkout(workout: WorkoutForm): Promise<Workout> {
-    const payload = {
-        ...workout,
-        started_at: new Date(workout.started_at).toISOString(),
-        duration: String(workout.durationHours * 3600 + workout.durationMinutes * 60 + workout.durationSeconds)
-    }
-    const response = await api.post<Workout>('/workouts/me/', payload)
-    return response.data
+  const payload = {
+    ...workout,
+    started_at: new Date(workout.started_at).toISOString(),
+    duration: String(
+      workout.durationHours * 3600 +
+        workout.durationMinutes * 60 +
+        workout.durationSeconds,
+    ),
+  };
+  const response = await api.post<Workout>("/workouts/me/", payload);
+  return response.data;
 }
 
 export async function deleteWorkout(workoutID: string): Promise<void> {
-    await api.delete(`/workouts/${workoutID}/`)
+  await api.delete(`/workouts/${workoutID}/`);
 }
 
 export async function likeWorkout(workoutID: string): Promise<LikeResponse> {
-    const response = await api.post<LikeResponse>('/workouts/' + workoutID + '/like/')
-    return response.data
+  const response = await api.post<LikeResponse>(
+    "/workouts/" + workoutID + "/like/",
+  );
+  return response.data;
 }
 
 export async function unlikeWorkout(workoutID: string): Promise<LikeResponse> {
-    const response = await api.delete<LikeResponse>('/workouts/' + workoutID + '/like/')
-    return response.data
+  const response = await api.delete<LikeResponse>(
+    "/workouts/" + workoutID + "/like/",
+  );
+  return response.data;
 }
 
 export async function fetchLikes(workoutID: string): Promise<Like[]> {
-    const response = await api.get<Like[]>('/workouts/' + workoutID + '/likes/')
-    return response.data
+  const response = await api.get<Like[]>("/workouts/" + workoutID + "/likes/");
+  return response.data;
 }
 
-export async function fetchWorkoutRoute(workoutID: string): Promise<WorkoutSample[]> {
-    const response = await api.get<WorkoutSample[]>('/workouts/' + workoutID + '/route/')
-    return response.data
+export async function fetchWorkoutRoute(
+  workoutID: string,
+): Promise<WorkoutSample[]> {
+  const response = await api.get<WorkoutSample[]>(
+    "/workouts/" + workoutID + "/route/",
+  );
+  return response.data;
 }

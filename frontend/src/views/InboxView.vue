@@ -1,32 +1,36 @@
 <script setup lang="ts">
-import InboxMessageCard from '@/components/social/InboxMessageCard.vue'
-import { useNotificationStore } from '@/stores/notification'
-import { ref, onMounted } from 'vue'
-import type { InboxMessage } from '@/types/notification'
+import InboxMessageCard from "@/components/social/InboxMessageCard.vue";
+import { useNotificationStore } from "@/stores/notification";
+import { onMounted } from "vue";
+import type { InboxMessage } from "@/types/notification";
 
-const notificationStore = useNotificationStore()
-const messages: InboxMessage[] = notificationStore.messages
+const notificationStore = useNotificationStore();
+const messages: InboxMessage[] = notificationStore.messages;
 
 onMounted(async () => {
   // Fetch messages from your API or store
-  await notificationStore.fetchMessages()
-})
+  await notificationStore.fetchMessages();
+});
 
 async function deleteMessage(messageId: string) {
   // Update the local messages array
-  const index = messages.findIndex(m => m.id === messageId)
+  const index = messages.findIndex((m) => m.id === messageId);
   if (index !== -1) {
-    messages.splice(index, 1)
+    messages.splice(index, 1);
   }
-  await notificationStore.deleteMessage(messageId)
+  await notificationStore.deleteMessage(messageId);
 }
-
 </script>
 
 <template>
   <div class="inbox-container">
     <h1 class="inbox-header">Inbox</h1>
-    <InboxMessageCard v-for="message in messages" :key="message.id" :message="message" @delete="deleteMessage(message.id)"/>
+    <InboxMessageCard
+      v-for="message in messages"
+      :key="message.id"
+      :message="message"
+      @delete="deleteMessage(message.id)"
+    />
   </div>
 </template>
 

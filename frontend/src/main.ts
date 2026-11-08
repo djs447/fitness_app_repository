@@ -1,26 +1,26 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-import App from './App.vue'
-import router from './router'
-import { useAuthStore } from '@/stores/auth'
+import App from "./App.vue";
+import router from "./router";
+import { useAuthStore } from "@/stores/auth";
 
 async function bootstrap() {
-    const app = createApp(App)
+  const app = createApp(App);
 
-    const pinia = createPinia()
+  const pinia = createPinia();
 
-    app.use(pinia)
+  app.use(pinia);
 
-    const authStore = useAuthStore(pinia)
+  const authStore = useAuthStore(pinia);
 
-    await authStore.initialize()
+  await authStore.initialize();
 
-    app.use(router)
+  app.use(router);
 
-    app.mount('#app')
+  app.mount("#app");
 }
 
-bootstrap()
+bootstrap();

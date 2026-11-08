@@ -1,4 +1,3 @@
-
 WorkoutActivityChoices = {
     "swimming": "Swimming",
     "running": "Running",
@@ -10,5 +9,5 @@ WorkoutDifficultyChoices = {
     "easy": "Easy",
     "medium": "Medium",
     "hard": "Hard",
-    "very_hard": "Very Hard"
+    "very_hard": "Very Hard",
 }
