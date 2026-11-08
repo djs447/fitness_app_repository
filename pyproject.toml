@@ -35,13 +35,32 @@ package-mode = false
 [tool.black]
 line-length = 88
 target-version = ["py312"]
+exclude = '''
+/(
+    migrations
+)/
+'''
 
 [tool.isort]
 profile = "black"
 line_length = 88
-py_version = 312
+skip = ["migrations"]
 
 [tool.flake8]
 max-line-length = 88
 extend-ignore = ["E203", "W503"]
-exclude = [".git","__pycache__",".venv"]
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "migrations",
+    "build",
+    "dist"
+]
+
+[dependency-groups]
+dev = [
+    "black (>=26.10.1,<27.0.0)",
+    "isort (>=9.0.2,<10.0.0)",
+    "flake8 (>=7.5.0,<8.0.0)"
+]
