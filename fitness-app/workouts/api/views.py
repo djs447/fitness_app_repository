@@ -152,11 +152,11 @@ class WorkoutViewSet(viewsets.ModelViewSet):
         url_name="share",
     )
     def share(self, request, pk=None):
-        sent_by = request.user
+        sent_by = request.user.id
         user_ids = request.data.get("user_ids", [])
         [
             send_inbox_message_notification.delay(
-                user_id=user_id, workout_id=self.get_object().id, sent_by=sent_by
+                user_id=user_id, workout_id=self.get_object().id, sent_by_id=sent_by
             )
             for user_id in user_ids
         ]

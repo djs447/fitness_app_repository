@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django: Debug Backend",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/fitness-app/manage.py",
+      "args": ["runserver", "8000", "--noreload"],
+      "django": true,
+      "justMyCode": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Celery: Debug Worker",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "celery",
+      "cwd": "${workspaceFolder}/fitness-app",
+      "args": [
+        "-A",
+        "fitness_app",
+        "worker",
+        "--loglevel=INFO",
+        "--pool=solo",
+        "--concurrency=1"
+      ],
+      "justMyCode": true,
+      "console": "integratedTerminal"
+    }
+  ]
+}
