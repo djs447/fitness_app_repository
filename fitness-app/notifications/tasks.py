@@ -1,3 +1,4 @@
+import logging
 from datetime import timedelta
 
 from celery import shared_task
@@ -12,6 +13,8 @@ from notifications.models import (
 )
 from notifications.utils import send_notification_email
 from workouts.models import Workout
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -28,9 +31,17 @@ def send_workout_congratulations(workout_id, template_name="Workout Congratulati
     }
 
     if not preferences:
+        logger.info(
+            "User %s has no notification preferences, skipping workout "
+            "congratulations notification.",
+            user.id,
+        )
         return
 
     if not preferences.workout_congratulations:
+        logger.info(
+            "User %s has disabled workout congratulations notifications.", user.id
+        )
         return
 
     send_notification_email(
@@ -81,6 +92,13 @@ def send_inbox_message_notification(
     user_id, workout_id, sent_by_id, template_name="Inbox Message Notification"
 ):
 
+    logger.info(
+        "Sending inbox notification for user_id=%s, workout_id=%s, sent_by_id=%s",
+        user_id,
+        workout_id,
+        sent_by_id,
+    )
+
     user = get_user_model().objects.select_related("profile").get(id=user_id)
     workout = Workout.objects.select_related("user").get(id=workout_id)
 
@@ -95,14 +113,33 @@ def send_inbox_message_notification(
     }
 
     if not preferences:
+        logger.info(
+            "User %s has no notification preferences, skipping inbox notification.",
+            user_id,
+        )
         return
 
     sent_by = get_user_model().objects.get(id=sent_by_id)
 
-    InboxMessage.objects.create(
+    inbox_message = InboxMessage.objects.create(
         user=user,
         workout_id=workout_id,
         subject="Sharing a Workout",
         message=inbox_message_template.text_body.format(**context),
         sent_by=sent_by,
     )
+
+    if inbox_message:
+        logger.info(
+            "Inbox message created for user_id=%s, workout_id=%s, sent_by_id=%s",
+            user_id,
+            workout_id,
+            sent_by_id,
+        )
+    else:
+        logger.error(
+            "Failed to add inbox message for user_id=%s, workout_id=%s, sent_by_id=%s",
+            user_id,
+            workout_id,
+            sent_by_id,
+        )

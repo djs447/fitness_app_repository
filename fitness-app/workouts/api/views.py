@@ -1,3 +1,5 @@
+import logging
+
 from django.db import transaction
 from django.db.models import Count, Exists, OuterRef
 from django.shortcuts import get_object_or_404
@@ -19,6 +21,8 @@ from workouts.api.serializers import (
     WorkoutSerializer,
 )
 from workouts.models import Comment, Workout, WorkoutSample
+
+logger = logging.getLogger(__name__)
 
 
 class WorkoutPagination(PageNumberPagination):
@@ -67,6 +71,7 @@ class WorkoutViewSet(viewsets.ModelViewSet):
         serializer = WorkoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
+            logger.info("Creating workout for user_id=%s", request.user.id)
             serializer.save(user=request.user)
             transaction.on_commit(
                 lambda: send_workout_congratulations.delay(serializer.instance.id)
