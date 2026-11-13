@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+import sentry_sdk
 from dotenv import load_dotenv
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -239,3 +242,11 @@ LOGGING = {
         },
     },
 }
+
+# Sentry Configuration
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"),
+    integrations=[DjangoIntegration(), CeleryIntegration()],
+    traces_sample_rate=0.1,
+    send_default_pii=False,
+)

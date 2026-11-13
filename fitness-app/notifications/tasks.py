@@ -102,7 +102,15 @@ def send_inbox_message_notification(
     user = get_user_model().objects.select_related("profile").get(id=user_id)
     workout = Workout.objects.select_related("user").get(id=workout_id)
 
-    inbox_message_template = InboxMessageTemplate.objects.get(name=template_name)
+    inbox_message_template = InboxMessageTemplate.objects.filter(
+        name=template_name
+    ).first()
+    if not inbox_message_template:
+        logger.error(
+            "Inbox message template with name=%s not found.",
+            template_name,
+        )
+        return
 
     display_name = user.profile.display_name
 
