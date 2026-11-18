@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 import sentry_sdk
 from dotenv import load_dotenv
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -28,12 +29,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get("ALLOWED_HOSTS", "").split(",")
+    if host.strip()
+]
 
 AUTH_USER_MODEL = "users.User"
 
@@ -61,7 +66,16 @@ INSTALLED_APPS = [
     "django_celery_results",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -74,6 +88,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -99,22 +114,55 @@ TEMPLATES = [
     },
 ]
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": ("whitenoise.storage.CompressedManifestStaticFilesStorage"),
+    },
+}
+
 WSGI_APPLICATION = "fitness_app.wsgi.application"
+
+# Security
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+
+    SECURE_HSTS_SECONDS = 31536000  # 1 year TODO make sure HTTPS works correctly
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+if DEBUG:
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB"),
+            "USER": os.environ.get("POSTGRES_USER"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+            "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+            "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        }
     }
-}
+
+else:
+
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
 
 
 # Password validation
@@ -160,45 +208,35 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery Configuration Options
 
-CELERY_TIMEZONE = "UTC"
+CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = "django-db"
+CELERY_BROKER_URL = os.environ["REDIS_URL"]
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # Email platform settings
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 if DEBUG:
 
-    MAILERS = {
-        "default": {
-            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
-            "OPTIONS": {
-                "host": "localhost",
-                "port": 1025,
-                "use_tls": False,
-                "use_ssl": False,
-            },
-        }
-    }
-
-    DEFAULT_FROM_EMAIL = "your-email@example.com"
+    EMAIL_HOST = "localhost"
+    EMAIL_PORT = 1025
+    EMAIL_USE_TLS = False
+    EMAIL_USE_SSL = False
 
 else:
-    MAILERS = {
-        "default": {
-            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
-            "OPTIONS": {
-                "host": os.environ.get("EMAIL_HOST"),
-                "port": int(os.environ.get("EMAIL_PORT", 587)),
-                "use_tls": True,
-                "use_ssl": False,
-                "username": os.environ.get("EMAIL_HOST_USER"),
-                "password": os.environ.get("EMAIL_HOST_PASSWORD"),
-            },
-        }
-    }
+
+    EMAIL_HOST = os.environ.get("EMAIL_HOST")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "your-email@example.com")
 
 
 DEFAULT_INACTIVITY_CADENCE_IN_DAYS = 7
@@ -247,6 +285,7 @@ LOGGING = {
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
     integrations=[DjangoIntegration(), CeleryIntegration()],
+    environment="production" if not DEBUG else "development",
     traces_sample_rate=0.1,
     send_default_pii=False,
 )

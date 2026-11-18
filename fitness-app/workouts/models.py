@@ -10,7 +10,7 @@ class Workout(SoftDeletableBaseModel):
         User, on_delete=models.CASCADE, related_name="workouts", blank=True, null=True
     )
     activity_type = models.CharField(
-        choices=WorkoutActivityChoices, blank=True, null=True
+        choices=WorkoutActivityChoices, blank=True, null=True, max_length=50
     )
     started_at = models.DateTimeField()
     duration = models.DurationField()
@@ -30,7 +30,7 @@ class Workout(SoftDeletableBaseModel):
     county = models.CharField(max_length=100, blank=True, null=True)
     state = USStateField(blank=True, null=True)
     difficulty = models.CharField(
-        choices=WorkoutDifficultyChoices, blank=True, null=True
+        choices=WorkoutDifficultyChoices, blank=True, null=True, max_length=50
     )
 
     source_file = models.CharField(max_length=255, blank=True, null=True, unique=True)
