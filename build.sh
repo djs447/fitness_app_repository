@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -o errexit
+
 poetry install --only main
-python manage.py collectstatic --noinput
-python manage.py migrate
+
+poetry run python fitness-app/manage.py collectstatic --noinput
