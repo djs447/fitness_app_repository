@@ -16,11 +16,14 @@ async function bootstrap() {
 
   const authStore = useAuthStore(pinia);
 
-  await authStore.initialize();
-
-  app.use(router);
-
-  app.mount("#app");
+  try {
+    await authStore.initialize();
+  } catch (error) {
+    console.error("Failed to initialize auth store:", error);
+  } finally {
+    app.use(router);
+    app.mount("#app");
+  }
 }
 
 bootstrap();
