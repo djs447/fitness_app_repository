@@ -54,6 +54,7 @@ services:
   - type: keyvalue
     name: fitness-redis
     plan: free
+    ipAllowList: []
 
   # Vue Frontend
   - type: web
