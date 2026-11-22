@@ -36,3 +36,4 @@ jobs:
         run: poetry run python fitness-app/manage.py check
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}

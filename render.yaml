@@ -21,6 +21,8 @@ services:
         generateValue: true
       - key: DEBUG
         value: "false"
+      - key: ALLOWED_HOSTS
+        sync: false
       # Frontend security/origins
       - key: CORS_ALLOWED_ORIGINS
         sync: false
@@ -65,4 +67,4 @@ services:
     staticPublishPath: "dist"
     envVars:
       - key: VITE_API_URL
-        value: https://fitness-app.onrender.com/api #TODO confirm this
+        value: https://fitness-app-frontend-92dh.onrender.com/
