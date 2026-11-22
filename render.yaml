@@ -61,7 +61,7 @@ services:
   - type: web
     name: fitness-app-frontend
     runtime: static
-    rootDir: "fitness-app/frontend"
+    rootDir: "frontend"
     buildCommand: "npm ci && npm run build"
     staticPublishPath: "dist"
     envVars:
