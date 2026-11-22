@@ -2,6 +2,7 @@ databases:
   - name: default
     databaseName: default
     user: default
+    plan: free
 
 services:
   # Django Backend
