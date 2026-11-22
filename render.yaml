@@ -1,0 +1,67 @@
+databases:
+  - name: default
+    databaseName: default
+    user: default
+
+services:
+  # Django Backend
+  - type: web
+    name: fitness-app
+    runtime: python
+    plan: free
+    rootDir: "fitness-app"
+    buildCommand: "./build.sh"
+    startCommand: "python -m gunicorn fitness_app.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: default
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "false"
+      # Frontend security/origins
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+
+      # Redis
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: fitness-redis
+          property: connectionString
+
+      # Email
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+
+      # Sentry
+      - key: SENTRY_DSN
+        sync: false
+
+  # Redis Service
+  - type: keyvalue
+    name: fitness-redis
+    plan: free
+
+  # Vue Frontend
+  - type: web
+    name: fitness-app-frontend
+    runtime: static
+    rootDir: "fitness-app/frontend"
+    buildCommand: "npm ci && npm run build"
+    staticPublishPath: "dist"
+    envVars:
+      - key: VITE_API_URL
+        value: https://fitness-app.onrender.com/api #TODO confirm this
