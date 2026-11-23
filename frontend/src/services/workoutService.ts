@@ -9,7 +9,7 @@ import type {
 import type { Like } from "@/types/user";
 
 export async function fetchWorkouts(
-  url: string = "/workouts/",
+  url: string = "workouts/",
 ): Promise<PaginatedWorkouts> {
   const response = await api.get<PaginatedWorkouts>(url);
   return response.data;
@@ -18,7 +18,7 @@ export async function fetchWorkouts(
 export async function getWorkout(
   workoutID: string | string[] | undefined,
 ): Promise<Workout> {
-  const response = await api.get<Workout>("/workouts/" + workoutID);
+  const response = await api.get<Workout>("workouts/" + workoutID);
 
   return response.data;
 }
@@ -28,7 +28,7 @@ export async function updateWorkout(
   data: Partial<Workout>,
 ): Promise<Workout> {
   const response = await api.patch<Workout>(
-    "/workouts/" + workoutID + "/",
+    "workouts/" + workoutID + "/",
     data,
   );
 
@@ -36,7 +36,7 @@ export async function updateWorkout(
 }
 
 export async function fetchMyWorkouts(
-  url: string = "/workouts/me/",
+  url: string = "workouts/me/",
 ): Promise<PaginatedWorkouts> {
   const response = await api.get<PaginatedWorkouts>(url);
   return response.data;
@@ -52,30 +52,30 @@ export async function createWorkout(workout: WorkoutForm): Promise<Workout> {
         workout.durationSeconds,
     ),
   };
-  const response = await api.post<Workout>("/workouts/me/", payload);
+  const response = await api.post<Workout>("workouts/me/", payload);
   return response.data;
 }
 
 export async function deleteWorkout(workoutID: string): Promise<void> {
-  await api.delete(`/workouts/${workoutID}/`);
+  await api.delete(`workouts/${workoutID}/`);
 }
 
 export async function likeWorkout(workoutID: string): Promise<LikeResponse> {
   const response = await api.post<LikeResponse>(
-    "/workouts/" + workoutID + "/like/",
+    "workouts/" + workoutID + "/like/",
   );
   return response.data;
 }
 
 export async function unlikeWorkout(workoutID: string): Promise<LikeResponse> {
   const response = await api.delete<LikeResponse>(
-    "/workouts/" + workoutID + "/like/",
+    "workouts/" + workoutID + "/like/",
   );
   return response.data;
 }
 
 export async function fetchLikes(workoutID: string): Promise<Like[]> {
-  const response = await api.get<Like[]>("/workouts/" + workoutID + "/likes/");
+  const response = await api.get<Like[]>("workouts/" + workoutID + "/likes/");
   return response.data;
 }
 
@@ -83,7 +83,7 @@ export async function fetchWorkoutRoute(
   workoutID: string,
 ): Promise<WorkoutSample[]> {
   const response = await api.get<WorkoutSample[]>(
-    "/workouts/" + workoutID + "/route/",
+    "workouts/" + workoutID + "/route/",
   );
   return response.data;
 }
